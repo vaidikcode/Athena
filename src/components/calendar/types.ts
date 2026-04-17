@@ -67,3 +67,14 @@ export function isSameDay(a: Date, b: Date): boolean {
     a.getMonth() === b.getMonth() &&
     a.getDate() === b.getDate();
 }
+
+/** True if [startAt, endAt] intersects the calendar day of `day` (local midnight–end). */
+export function eventTouchesDay(startAt: string | Date, endAt: string | Date, day: Date): boolean {
+  const dayStart = new Date(day);
+  dayStart.setHours(0, 0, 0, 0);
+  const dayEnd = new Date(day);
+  dayEnd.setHours(23, 59, 59, 999);
+  const s = new Date(startAt).getTime();
+  const e = new Date(endAt).getTime();
+  return s <= dayEnd.getTime() && e >= dayStart.getTime();
+}

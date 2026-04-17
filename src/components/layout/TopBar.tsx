@@ -1,18 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export function TopBar({ title }: { title: string }) {
+export function TopBar({ title, subtitle }: { title: string; subtitle?: string }) {
   const [time, setTime] = useState("");
 
   useEffect(() => {
     const fmt = () =>
       setTime(
-        new Date().toLocaleTimeString("en-US", {
+        new Date().toLocaleTimeString(undefined, {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
-          hour12: false,
         })
       );
     fmt();
@@ -21,24 +20,12 @@ export function TopBar({ title }: { title: string }) {
   }, []);
 
   return (
-    <div
-      style={{
-        height: 48,
-        borderBottom: "1px solid var(--surface-border)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 24px",
-        background: "var(--surface-raised)",
-        flexShrink: 0,
-      }}
-    >
-      <span style={{ fontWeight: 500, fontSize: 14, color: "var(--ink)" }}>
-        {title}
-      </span>
-      <span className="mono" style={{ color: "var(--ink-subtle)", fontSize: 12 }}>
-        {time}
-      </span>
-    </div>
+    <header className="flex h-12 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-5">
+      <div>
+        <h1 className="text-sm font-semibold text-slate-900">{title}</h1>
+        {subtitle ? <p className="text-xs text-slate-500">{subtitle}</p> : null}
+      </div>
+      <time className="font-mono text-xs text-slate-400">{time}</time>
+    </header>
   );
 }

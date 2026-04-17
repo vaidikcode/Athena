@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { calendarStore } from "@/lib/calendar/store";
+import { normalizeEventRange } from "@/lib/calendar/interpret-date";
 import type { EventStatus, EventType } from "@/lib/db/schema";
 
 const createSchema = z.object({
@@ -36,6 +37,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "from and to are required" }, { status: 400 });
   }
 
+  const fromDate = new Date(from);
+  const toDate = new Date(to);
+  if (Number.isNaN(fromDate.getTime()) || Number.isNaN(toDate.getTime())) {
+    return NextResponse.json({ error: "from and to must be valid ISO date strings" }, { status: 400 });
+  }
+
   const statusParam = searchParams.get("status");
   const typeParam = searchParams.get("type");
 
@@ -44,13 +51,45 @@ export async function GET(req: NextRequest) {
 
   try {
     const events = await calendarStore.list({
-      from: new Date(from),
-      to: new Date(to),
+      from: fromDate,
+      to: toDate,
       status,
       type,
     });
+    // #region agent log
+    fetch("http://127.0.0.1:7591/ingest/73c4b017-15bb-4995-8b45-c03b8545c6c9", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "218496" },
+      body: JSON.stringify({
+        sessionId: "218496",
+        hypothesisId: "H4",
+        location: "api/calendar/events/route.ts:GET",
+        message: "list returned",
+        data: {
+          count: events.length,
+          fromMs: fromDate.getTime(),
+          toMs: toDate.getTime(),
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     return NextResponse.json(events);
   } catch (err) {
+    // #region agent log
+    fetch("http://127.0.0.1:7591/ingest/73c4b017-15bb-4995-8b45-c03b8545c6c9", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "218496" },
+      body: JSON.stringify({
+        sessionId: "218496",
+        hypothesisId: "H4",
+        location: "api/calendar/events/route.ts:GET",
+        message: "list catch",
+        data: { err: String(err).slice(0, 300) },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }
@@ -68,13 +107,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues }, { status: 422 });
   }
 
-  const { startAt, endAt, ...rest } = parsed.data;
+  const { startAt: startStr, endAt: endStr, ...rest } = parsed.data;
+  const { startAt, endAt } = normalizeEventRange(startStr, endStr);
   try {
     const event = await calendarStore.create(
       {
         ...rest,
-        startAt: new Date(startAt),
-        endAt: new Date(endAt),
+        startAt,
+        endAt,
         source: "user",
         type: rest.type ?? "other",
         energyCost: rest.energyCost ?? "medium",

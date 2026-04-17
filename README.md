@@ -62,28 +62,32 @@ DB migrations run automatically on first boot via `instrumentation.ts`.
 
 ---
 
-## UI Screens
+## UI (chat-first)
+
+The product surface is intentionally small: **Chat** (home), **Calendar**, **Rules**, and a **Tools** reference page. Theme is light with emerald accents; controls use shadcn-style primitives (Radix + Tailwind).
 
 | Route | Description |
 |---|---|
-| `/` | Dashboard — today's hourly timeline, run triggers, cron ETA, pending suggestions count |
-| `/rules` | Rules manager — agent-proposed inbox, CRUD list with enable/disable toggle |
-| `/memory` | Memory viewer — Hourly / Daily / Yesterday tabs with raw event explorer |
-| `/runs` | Run history — expandable transcripts, tool calls, timing |
+| `/` | Chat — Vercel AI SDK `useChat` + streaming tool calls/results (same patterns as mainstream AI chat UIs) |
+| `/calendar` | Calendar views and event CRUD |
+| `/rules` | Rules engine — proposals inbox + CRUD |
+| `/tools` | Catalog of tool names and descriptions (reference only) |
+| `/memory`, `/runs` | Redirect to `/` (background jobs stay automatic; advanced views hidden) |
+
+Chat hits `POST /api/chat`, which wraps the existing LangChain tool registry as AI SDK tools (`streamText`, multi-step `stopWhen`).
 
 ---
 
-## Manual Triggers (no cron needed for dev)
+## Manual agent runs (optional)
+
+Cron still runs hourly/daily in the server process. For a one-off:
 
 ```bash
-# Trigger hourly agent
 curl -X POST http://localhost:3000/api/runs/hourly
-
-# Trigger daily agent
 curl -X POST http://localhost:3000/api/runs/daily
 ```
 
-Or use the "Run Hourly Now" / "Run Daily Now" buttons on the Dashboard.
+In the app, expand **Background jobs** at the bottom of the sidebar for discreet buttons.
 
 ---
 

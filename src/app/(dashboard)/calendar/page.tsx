@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { TopBar } from "@/components/layout/TopBar";
 import { CalendarShell } from "@/components/calendar/CalendarShell";
 import { MonthGrid } from "@/components/calendar/MonthGrid";
 import { WeekGrid } from "@/components/calendar/WeekGrid";
@@ -157,6 +158,7 @@ export default function CalendarPage() {
 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", height: "100%" }}>
+      <TopBar title="Calendar" />
       <CalendarShell
         view={view}
         onViewChange={setView}

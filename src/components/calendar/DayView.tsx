@@ -1,7 +1,8 @@
 "use client";
 
+import { useMemo, useLayoutEffect, useRef } from "react";
 import type { CalEvent } from "./types";
-import { TYPE_COLORS, ENERGY_DOT, isSameDay } from "./types";
+import { TYPE_COLORS, ENERGY_DOT, isSameDay, eventTouchesDay } from "./types";
 
 interface Props {
   currentDate: Date;
@@ -23,7 +24,11 @@ interface PositionedEvent {
   isConflict: boolean;
 }
 
-function positionDayEvents(events: CalEvent[], conflicts: Array<[CalEvent, CalEvent]>): PositionedEvent[] {
+function positionDayEvents(
+  events: CalEvent[],
+  conflicts: Array<[CalEvent, CalEvent]>,
+  day: Date
+): PositionedEvent[] {
   const conflictIds = new Set(conflicts.flatMap(([a, b]) => [a.id, b.id]));
   const sorted = [...events].sort((a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime());
 
@@ -50,12 +55,19 @@ function positionDayEvents(events: CalEvent[], conflicts: Array<[CalEvent, CalEv
 
   const numCols = columns.length || 1;
 
+  const dayStart = new Date(day);
+  dayStart.setHours(0, 0, 0, 0);
+  const dayEnd = new Date(day);
+  dayEnd.setHours(23, 59, 59, 999);
+
   return sorted.map((ev) => {
-    const start = new Date(ev.startAt);
-    const end = new Date(ev.endAt);
-    const startMin = start.getHours() * 60 + start.getMinutes();
-    const endMin = end.getHours() * 60 + end.getMinutes();
-    const durationMin = Math.max(endMin - startMin, 30);
+    const rawStart = new Date(ev.startAt).getTime();
+    const rawEnd = new Date(ev.endAt).getTime();
+    const clipStart = new Date(Math.max(rawStart, dayStart.getTime()));
+    const clipEnd = new Date(Math.min(rawEnd, dayEnd.getTime()));
+    const startMin = clipStart.getHours() * 60 + clipStart.getMinutes();
+    const endMin = clipEnd.getHours() * 60 + clipEnd.getMinutes();
+    const durationMin = Math.max(endMin - startMin, 15);
     const col = eventToCol.get(ev.id) ?? 0;
 
     return {
@@ -72,9 +84,23 @@ function positionDayEvents(events: CalEvent[], conflicts: Array<[CalEvent, CalEv
 export function DayView({ currentDate, events, onEventClick, conflicts }: Props) {
   const today = new Date();
   const isToday = isSameDay(currentDate, today);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const dayEvents = events.filter((e) => isSameDay(new Date(e.startAt), currentDate));
-  const positioned = positionDayEvents(dayEvents, conflicts);
+  const dayEvents = useMemo(
+    () => events.filter((e) => eventTouchesDay(e.startAt, e.endAt, currentDate)),
+    [events, currentDate]
+  );
+  const positioned = useMemo(
+    () => positionDayEvents(dayEvents, conflicts, currentDate),
+    [dayEvents, conflicts, currentDate]
+  );
+
+  useLayoutEffect(() => {
+    const el = scrollRef.current;
+    if (!el || positioned.length === 0) return;
+    const minTop = Math.min(...positioned.map((p) => p.top));
+    el.scrollTop = Math.max(0, minTop - 16);
+  }, [positioned]);
 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -114,7 +140,7 @@ export function DayView({ currentDate, events, onEventClick, conflicts }: Props)
       </div>
 
       {/* Scrollable timeline */}
-      <div style={{ flex: 1, overflowY: "auto" }}>
+      <div ref={scrollRef} style={{ flex: 1, overflowY: "auto" }}>
         <div style={{ display: "flex", minHeight: 24 * ROW_HEIGHT }}>
           {/* Time column */}
           <div style={{ width: TIME_COL_W, flexShrink: 0 }}>

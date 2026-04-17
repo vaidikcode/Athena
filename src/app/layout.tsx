@@ -5,18 +5,18 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Phuko — Life OS",
-  description: "Your hourly intelligence layer",
+  description: "Your personal operating system",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <body style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+    <html lang="en">
+      <body className="min-h-screen antialiased">
         <QueryProvider>
-          <Sidebar />
-          <main style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-            {children}
-          </main>
+          <div className="flex h-screen min-h-0">
+            <Sidebar />
+            <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-50">{children}</main>
+          </div>
         </QueryProvider>
       </body>
     </html>

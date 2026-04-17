@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import type { CalEvent } from "./types";
-import { TYPE_COLORS, ENERGY_DOT, isSameDay } from "./types";
+import { TYPE_COLORS, ENERGY_DOT, isSameDay, eventTouchesDay } from "./types";
 
 interface Props {
   currentDate: Date;
@@ -35,7 +35,7 @@ interface PositionedEvent {
   isConflict: boolean;
 }
 
-function positionEvents(dayEvents: CalEvent[], conflicts: Array<[CalEvent, CalEvent]>): PositionedEvent[] {
+function positionEvents(dayEvents: CalEvent[], conflicts: Array<[CalEvent, CalEvent]>, day: Date): PositionedEvent[] {
   const conflictIds = new Set(conflicts.flatMap(([a, b]) => [a.id, b.id]));
   const sorted = [...dayEvents].sort((a, b) => new Date(a.startAt).getTime() - new Date(b.startAt).getTime());
 
@@ -65,12 +65,19 @@ function positionEvents(dayEvents: CalEvent[], conflicts: Array<[CalEvent, CalEv
 
   const numCols = columns.length || 1;
 
+  const dayStart = new Date(day);
+  dayStart.setHours(0, 0, 0, 0);
+  const dayEnd = new Date(day);
+  dayEnd.setHours(23, 59, 59, 999);
+
   return sorted.map((ev) => {
-    const start = new Date(ev.startAt);
-    const end = new Date(ev.endAt);
-    const startMinutes = start.getHours() * 60 + start.getMinutes();
-    const endMinutes = end.getHours() * 60 + end.getMinutes();
-    const durationMinutes = Math.max(endMinutes - startMinutes, 30);
+    const rawStart = new Date(ev.startAt).getTime();
+    const rawEnd = new Date(ev.endAt).getTime();
+    const clipStart = new Date(Math.max(rawStart, dayStart.getTime()));
+    const clipEnd = new Date(Math.min(rawEnd, dayEnd.getTime()));
+    const startMinutes = clipStart.getHours() * 60 + clipStart.getMinutes();
+    const endMinutes = clipEnd.getHours() * 60 + clipEnd.getMinutes();
+    const durationMinutes = Math.max(endMinutes - startMinutes, 15);
     const col = eventToCol.get(ev.id) ?? 0;
 
     const top = (startMinutes / 60) * ROW_HEIGHT;
@@ -94,10 +101,7 @@ export function WeekGrid({ currentDate, events, onEventClick, conflicts }: Props
   const weekDays = useMemo(() => getWeekDays(currentDate), [currentDate]);
 
   const eventsForDay = (day: Date) =>
-    events.filter((e) => {
-      const s = new Date(e.startAt);
-      return isSameDay(s, day);
-    });
+    events.filter((e) => eventTouchesDay(e.startAt, e.endAt, day));
 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
@@ -156,7 +160,7 @@ export function WeekGrid({ currentDate, events, onEventClick, conflicts }: Props
           {/* Day columns */}
           {weekDays.map((day, di) => {
             const dayEvs = eventsForDay(day);
-            const positioned = positionEvents(dayEvs, conflicts);
+            const positioned = positionEvents(dayEvs, conflicts, day);
 
             return (
               <div

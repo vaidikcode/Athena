@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { calendarStore } from "@/lib/calendar/store";
+import { interpretCalendarInstant, normalizeEventRange } from "@/lib/calendar/interpret-date";
 
 const patchSchema = z.object({
   title: z.string().optional(),
@@ -41,10 +42,17 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: parsed.error.issues }, { status: 422 });
   }
 
-  const { startAt, endAt, ...rest } = parsed.data;
+  const { startAt: startStr, endAt: endStr, ...rest } = parsed.data;
   const patch: Record<string, unknown> = { ...rest };
-  if (startAt) patch.startAt = new Date(startAt);
-  if (endAt) patch.endAt = new Date(endAt);
+  if (startStr && endStr) {
+    const n = normalizeEventRange(startStr, endStr);
+    patch.startAt = n.startAt;
+    patch.endAt = n.endAt;
+  } else if (startStr) {
+    patch.startAt = interpretCalendarInstant(startStr);
+  } else if (endStr) {
+    patch.endAt = interpretCalendarInstant(endStr);
+  }
 
   try {
     const event = await calendarStore.update(id, patch as Parameters<typeof calendarStore.update>[1], "user");

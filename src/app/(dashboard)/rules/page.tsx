@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { TopBar } from "@/components/layout/TopBar";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Check, X, Pencil, Trash2, Plus, ChevronUp, ChevronDown } from "lucide-react";
 import type { Rule, Suggestion } from "@/lib/db";
 
@@ -71,7 +71,7 @@ export default function RulesPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <TopBar title="Rules" />
+      <TopBar title="Rules" subtitle="Automations the assistant can follow or suggest" />
       <div style={{ flex: 1, overflow: "auto", padding: 24 }}>
 
         {/* Agent-proposed inbox */}
@@ -241,7 +241,7 @@ function RuleRow({
             style={{ ...inputStyle, resize: "vertical", marginTop: 6 }}
           />
           <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-            <Button variant="primary" onClick={save}>Save</Button>
+            <Button variant="default" onClick={save}>Save</Button>
             <Button variant="ghost" onClick={() => setEditing(false)}>Cancel</Button>
           </div>
         </div>
@@ -350,7 +350,7 @@ function NewRuleForm({ onSaved, onCancel }: { onSaved: () => void; onCancel: () 
         </label>
       </div>
       <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-        <Button variant="primary" onClick={save} disabled={saving || !title || !body}>
+        <Button variant="default" onClick={save} disabled={saving || !title || !body}>
           {saving ? "Saving…" : "Save Rule"}
         </Button>
         <Button variant="ghost" onClick={onCancel}>Cancel</Button>

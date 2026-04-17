@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { StructuredTool } from "@langchain/core/tools";
 import { calendarStore } from "./store";
+import { interpretCalendarInstant, normalizeEventRange } from "./interpret-date";
 import type { RecurrenceRule } from "@/lib/db/schema";
 
 // ── Shared sub-schemas ─────────────────────────────────────────────────────
@@ -23,7 +24,7 @@ const statusEnum = z.enum(["confirmed", "tentative", "cancelled"]);
 class ListEventsTool extends StructuredTool {
   name = "list_events";
   description =
-    "List calendar events in a date/time window. Returns expanded recurrence instances. Excludes cancelled events unless status filter includes 'cancelled'.";
+    "Calendar read — list events in an ISO8601 window (primary CRUD companion to create/update/delete). Returns expanded recurrence instances. Excludes cancelled unless status includes 'cancelled'.";
 
   schema = z.object({
     from: z.string().describe("ISO8601 start of window"),
@@ -46,7 +47,7 @@ class ListEventsTool extends StructuredTool {
 // ── get_event ─────────────────────────────────────────────────────────────
 class GetEventTool extends StructuredTool {
   name = "get_event";
-  description = "Get a single calendar event by ID.";
+  description = "Calendar read — fetch one event by id before update/delete/complete/annotate.";
 
   schema = z.object({
     id: z.string().describe("Event ID"),
@@ -63,12 +64,16 @@ class GetEventTool extends StructuredTool {
 class CreateEventTool extends StructuredTool {
   name = "create_event";
   description =
-    "Create a new calendar event. Use type, energyCost, priority to help the agent reason about workload and bottlenecks.";
+    "Calendar write (create) — add a block; use type, energyCost, priority so load and bottleneck tools stay meaningful.";
 
   schema = z.object({
     title: z.string(),
-    startAt: z.string().describe("ISO8601"),
-    endAt: z.string().describe("ISO8601"),
+    startAt: z
+      .string()
+      .describe("Start time: full ISO with offset preferred (e.g. 2026-04-18T15:00:00+05:30). Date-only YYYY-MM-DD is treated as 09:00 local that day."),
+    endAt: z
+      .string()
+      .describe("End time: same rules as startAt; if omitted or not after start, end is defaulted to +1h after start."),
     description: z.string().optional(),
     location: z.string().optional(),
     type: eventTypeEnum.optional(),
@@ -84,11 +89,12 @@ class CreateEventTool extends StructuredTool {
   });
 
   async _call(input: z.infer<typeof this.schema>) {
+    const { startAt, endAt } = normalizeEventRange(input.startAt, input.endAt);
     const event = await calendarStore.create(
       {
         ...input,
-        startAt: new Date(input.startAt),
-        endAt: new Date(input.endAt),
+        startAt,
+        endAt,
         source: "agent",
         recurrence: (input.recurrence as RecurrenceRule) ?? null,
         type: input.type ?? "other",
@@ -104,7 +110,8 @@ class CreateEventTool extends StructuredTool {
 // ── update_event ──────────────────────────────────────────────────────────
 class UpdateEventTool extends StructuredTool {
   name = "update_event";
-  description = "Update fields on an existing calendar event.";
+  description =
+    "Calendar write (update) — patch an existing event (times, status, type, energy, recurrence, etc.). Prefer after list_events or get_event.";
 
   schema = z.object({
     id: z.string(),
@@ -127,8 +134,15 @@ class UpdateEventTool extends StructuredTool {
 
   async _call({ id, startAt, endAt, recurrence, ...rest }: z.infer<typeof this.schema>) {
     const patch: Record<string, unknown> = { ...rest };
-    if (startAt) patch.startAt = new Date(startAt);
-    if (endAt) patch.endAt = new Date(endAt);
+    if (startAt && endAt) {
+      const n = normalizeEventRange(startAt, endAt);
+      patch.startAt = n.startAt;
+      patch.endAt = n.endAt;
+    } else if (startAt) {
+      patch.startAt = interpretCalendarInstant(startAt);
+    } else if (endAt) {
+      patch.endAt = interpretCalendarInstant(endAt);
+    }
     if (recurrence !== undefined) patch.recurrence = recurrence as RecurrenceRule | null;
 
     const event = await calendarStore.update(id, patch as Parameters<typeof calendarStore.update>[1], "agent");
@@ -139,7 +153,8 @@ class UpdateEventTool extends StructuredTool {
 // ── delete_event ──────────────────────────────────────────────────────────
 class DeleteEventTool extends StructuredTool {
   name = "delete_event";
-  description = "Soft-delete (cancel) a calendar event by ID.";
+  description =
+    "Calendar write (delete) — soft-cancel an event by id (status cancelled / soft delete). Use when removing overload or clearing conflicts.";
 
   schema = z.object({
     id: z.string(),
@@ -154,7 +169,8 @@ class DeleteEventTool extends StructuredTool {
 // ── complete_event ────────────────────────────────────────────────────────
 class CompleteEventTool extends StructuredTool {
   name = "complete_event";
-  description = "Mark an event as completed, optionally recording actual timings and outcome notes.";
+  description =
+    "Calendar write (complete) — mark done; optional actual times and outcome notes for leverage / reflection.";
 
   schema = z.object({
     id: z.string(),
@@ -168,8 +184,8 @@ class CompleteEventTool extends StructuredTool {
       id,
       {
         outcomeNotes,
-        actualStartAt: actualStartAt ? new Date(actualStartAt) : undefined,
-        actualEndAt: actualEndAt ? new Date(actualEndAt) : undefined,
+        actualStartAt: actualStartAt ? interpretCalendarInstant(actualStartAt) : undefined,
+        actualEndAt: actualEndAt ? interpretCalendarInstant(actualEndAt) : undefined,
       },
       "agent"
     );
@@ -180,7 +196,8 @@ class CompleteEventTool extends StructuredTool {
 // ── annotate_event ────────────────────────────────────────────────────────
 class AnnotateEventTool extends StructuredTool {
   name = "annotate_event";
-  description = "Append a note / post-hoc observation to an event's outcome notes and write a log entry.";
+  description =
+    "Calendar write (annotate) — append a post-hoc note to outcome notes and log it (patterns, why something slid).";
 
   schema = z.object({
     id: z.string(),

@@ -1,4 +1,4 @@
-import { eq, and, gte, lte, inArray } from "drizzle-orm";
+import { eq, and, gte, lte, inArray, or, isNull, isNotNull } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import {
   calendarEvents,
@@ -103,10 +103,35 @@ export class CalendarStore {
   }
 
   async list(range: ListRange): Promise<CalendarEvent[]> {
-    const conditions = [
-      gte(calendarEvents.startAt, range.from),
+    if (Number.isNaN(range.from.getTime()) || Number.isNaN(range.to.getTime())) {
+      return [];
+    }
+
+    /** Non–recurrence-master rows: any event that overlaps [from, to] (start <= to && end >= from). */
+    const notRecurrenceMaster = or(
+      isNull(calendarEvents.recurrence),
+      isNotNull(calendarEvents.recurrenceParentId)
+    );
+    const overlapsWindow = and(
       lte(calendarEvents.startAt, range.to),
-    ];
+      gte(calendarEvents.endAt, range.from),
+      notRecurrenceMaster
+    );
+
+    /**
+     * Recurrence series masters: still selected when series *starts* in range so expandRecurrence
+     * can emit instances (masters often do not overlap the window on their stored endAt alone).
+     */
+    const recurrenceMasterInRange = and(
+      isNotNull(calendarEvents.recurrence),
+      isNull(calendarEvents.recurrenceParentId),
+      gte(calendarEvents.startAt, range.from),
+      lte(calendarEvents.startAt, range.to)
+    );
+
+    const windowPredicate = or(overlapsWindow, recurrenceMasterInRange);
+
+    const conditions = [windowPredicate];
 
     if (range.status?.length) {
       conditions.push(inArray(calendarEvents.status, range.status));
@@ -148,7 +173,26 @@ export class CalendarStore {
     };
     await db.insert(calendarEvents).values(row);
     this.writeLog(id, "created", actor, undefined, `Event "${input.title}" created`);
-    return (await this.get(id))!;
+    const created = (await this.get(id))!;
+    // #region agent log
+    fetch("http://127.0.0.1:7591/ingest/73c4b017-15bb-4995-8b45-c03b8545c6c9", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "218496" },
+      body: JSON.stringify({
+        sessionId: "218496",
+        hypothesisId: "H3",
+        location: "calendar/store.ts:create",
+        message: "calendar row inserted",
+        data: {
+          id: created.id,
+          startMs: created.startAt.getTime(),
+          endMs: created.endAt.getTime(),
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+    return created;
   }
 
   async update(
