@@ -1,0 +1,84 @@
+@import "tailwindcss";
+@config "../../tailwind.config.mjs";
+
+:root {
+  --ink: #e2e8f0;
+  --ink-muted: #94a3b8;
+  --ink-subtle: #64748b;
+  --ink-faint: #334155;
+  --surface-base: #0a0f1e;
+  --surface-raised: #0f172a;
+  --surface-overlay: #1e293b;
+  --surface-border: rgba(148, 163, 184, 0.12);
+  --agent: #38bdf8;
+  --agent-dim: #0ea5e9;
+  --status-success: #4ade80;
+  --status-warning: #fbbf24;
+  --status-error: #f87171;
+  --status-running: #38bdf8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--surface-base);
+  color: var(--ink);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink-faint);
+  border-radius: 2px;
+}
+
+/* Mono text */
+.mono {
+  font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* Status dots */
+.status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.status-dot--success { background: var(--status-success); }
+.status-dot--warning { background: var(--status-warning); }
+.status-dot--error { background: var(--status-error); }
+.status-dot--running {
+  background: var(--status-running);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Card */
+.card {
+  background: var(--surface-raised);
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+}
+
+/* Agent accent */
+.agent-text {
+  color: var(--agent);
+}
