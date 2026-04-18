@@ -52,13 +52,13 @@ export function GoogleAccountForm({ onSuccess, className }: Props) {
   return (
     <form onSubmit={handleSubmit} className={cn("space-y-4", className)}>
       {error ? (
-        <p className="rounded-md border border-athens-stone bg-athens-highlight px-3 py-2 text-sm font-medium text-athens-blue">
+        <p className="rounded-md border border-black bg-nb-cream px-3 py-2 text-sm font-medium text-nb-blue">
           {error}
         </p>
       ) : null}
 
       <div>
-        <label htmlFor={emailId} className="block text-sm font-medium text-athens-blue">
+        <label htmlFor={emailId} className="block text-sm font-medium text-nb-blue">
           Email or phone
         </label>
         <input
@@ -68,13 +68,13 @@ export function GoogleAccountForm({ onSuccess, className }: Props) {
           autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1.5 w-full rounded-lg border border-athens-stone bg-white px-3 py-2.5 text-sm text-athens-blue shadow-sm outline-none transition focus:border-athens-blue focus:ring-2 focus:ring-athens-blue/20"
+          className="mt-1.5 w-full rounded-lg border border-black bg-white px-3 py-2.5 text-sm text-nb-blue shadow-sm outline-none transition focus:border-nb-blue focus:ring-2 focus:ring-athens-blue/20"
           placeholder="Enter your email"
         />
       </div>
 
       <div>
-        <label htmlFor={passwordId} className="block text-sm font-medium text-athens-blue">
+        <label htmlFor={passwordId} className="block text-sm font-medium text-nb-blue">
           Password
         </label>
         <input
@@ -84,7 +84,7 @@ export function GoogleAccountForm({ onSuccess, className }: Props) {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-1.5 w-full rounded-lg border border-athens-stone bg-white px-3 py-2.5 text-sm text-athens-blue shadow-sm outline-none transition focus:border-athens-blue focus:ring-2 focus:ring-athens-blue/20"
+          className="mt-1.5 w-full rounded-lg border border-black bg-white px-3 py-2.5 text-sm text-nb-blue shadow-sm outline-none transition focus:border-nb-blue focus:ring-2 focus:ring-athens-blue/20"
           placeholder="Enter your password"
         />
       </div>
@@ -92,8 +92,8 @@ export function GoogleAccountForm({ onSuccess, className }: Props) {
       <button
         type="submit"
         className={cn(
-          "flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-athens-stone bg-white",
-          "text-sm font-medium text-athens-blue shadow-sm transition hover:bg-athens-highlight"
+          "flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-black bg-white",
+          "text-sm font-medium text-nb-blue shadow-sm transition hover:bg-nb-cream"
         )}
       >
         <span

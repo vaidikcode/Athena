@@ -176,7 +176,7 @@ export default function CalendarPage() {
 
       {/* Conflict badge */}
       {conflicts.length > 0 && (
-        <div className="flex shrink-0 items-center gap-2 border-b border-athens-stone bg-athens-highlight px-4 py-2 text-xs font-semibold text-athens-blue">
+        <div className="flex shrink-0 items-center gap-2 border-b border-black bg-nb-cream px-4 py-2 text-xs font-semibold text-nb-blue">
           <AlertTriangle className="size-4 shrink-0" aria-hidden />
           {conflicts.length} scheduling conflict{conflicts.length > 1 ? "s" : ""} detected
         </div>

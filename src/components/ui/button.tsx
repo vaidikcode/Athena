@@ -4,22 +4,24 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nb-blue/50 disabled:pointer-events-none disabled:opacity-50 disabled:grayscale [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 select-none",
   {
     variants: {
       variant: {
-        default:     "bg-brand-600 text-white shadow-sm hover:bg-brand-700 active:bg-brand-700",
-        secondary:   "bg-brand-50 text-brand-700 border border-brand-200 hover:bg-brand-100",
-        outline:     "border border-surface-border bg-white text-ink hover:bg-surface-base hover:border-brand-200",
-        ghost:       "text-ink-muted hover:bg-surface-base hover:text-ink",
-        destructive: "bg-red-50 text-red-700 border border-red-200 hover:bg-red-100",
-        link:        "text-brand-600 underline-offset-4 hover:underline p-0",
+        default:     "bg-nb-blue text-white border-[3px] border-black shadow-nb hover:shadow-nb-md active:shadow-nb-sm active:translate-x-[2px] active:translate-y-[2px]",
+        secondary:   "bg-nb-yellow text-black border-[3px] border-black shadow-nb hover:shadow-nb-md active:shadow-nb-sm active:translate-x-[2px] active:translate-y-[2px]",
+        success:     "bg-nb-green text-black border-[3px] border-black shadow-nb hover:shadow-nb-md active:shadow-nb-sm active:translate-x-[2px] active:translate-y-[2px]",
+        destructive: "bg-nb-coral text-white border-[3px] border-black shadow-nb hover:shadow-nb-md active:shadow-nb-sm active:translate-x-[2px] active:translate-y-[2px]",
+        outline:     "bg-white text-black border-[3px] border-black shadow-nb hover:shadow-nb-md active:shadow-nb-sm active:translate-x-[2px] active:translate-y-[2px]",
+        ghost:       "bg-transparent text-black border-[2px] border-transparent hover:border-black hover:bg-white hover:shadow-nb-sm active:translate-x-[1px] active:translate-y-[1px]",
+        link:        "text-nb-blue underline-offset-4 hover:underline p-0 border-none shadow-none",
+        purple:      "bg-nb-purple text-black border-[3px] border-black shadow-nb hover:shadow-nb-md active:shadow-nb-sm active:translate-x-[2px] active:translate-y-[2px]",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm:      "h-7 rounded-md px-3 text-xs",
-        lg:      "h-11 rounded-lg px-6 text-base",
-        icon:    "h-9 w-9",
+        default: "h-10 px-5 py-2 text-sm",
+        sm:      "h-7 rounded-lg px-3 text-xs",
+        lg:      "h-12 rounded-2xl px-7 text-base",
+        icon:    "h-10 w-10",
       },
     },
     defaultVariants: {

@@ -32,23 +32,23 @@ export default function DashboardPage() {
     <>
       <div className="flex h-full min-h-0 overflow-hidden">
         {/* Main content */}
-        <div className="flex-1 min-w-0 overflow-y-auto px-6 py-6 space-y-5">
+        <div className="flex-1 min-w-0 overflow-y-auto px-5 py-5 space-y-5 bg-nb-cream">
           {/* Header */}
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-start gap-3">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-brand-600 shadow-sm mt-0.5 shrink-0">
-                <Zap className="size-5 text-white" />
+              <div className="flex size-11 items-center justify-center rounded-2xl border-[3px] border-black bg-nb-yellow shadow-nb mt-0.5 shrink-0">
+                <Zap className="size-6 text-black" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-ink tracking-tight">
+                <h1 className="text-2xl font-black text-black tracking-tight">
                   {greeting()}, {name}
                 </h1>
-                <p className="text-sm text-ink-subtle mt-0.5">Your schedule overview for today.</p>
+                <p className="text-sm font-bold text-black/50 mt-0.5">Your schedule overview for today.</p>
               </div>
             </div>
-            <div className="flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1.5 shrink-0">
-              <Flame className="size-4 text-brand-600 shrink-0" />
-              <span className="text-sm font-semibold text-brand-700">{MOCK_METRICS.streakDays} day streak</span>
+            <div className="flex items-center gap-1.5 rounded-full border-[3px] border-black bg-nb-yellow px-3.5 py-1.5 shrink-0 shadow-nb-sm">
+              <Flame className="size-4 text-black shrink-0" />
+              <span className="text-sm font-black text-black">{MOCK_METRICS.streakDays} day streak</span>
             </div>
           </div>
 
@@ -61,7 +61,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Right — calendar */}
-        <div className="w-72 shrink-0 overflow-y-auto border-l border-surface-border bg-white px-4 py-6">
+        <div className="w-72 shrink-0 overflow-y-auto border-l-[3px] border-black bg-white px-4 py-5">
           <CalendarWidget />
         </div>
       </div>

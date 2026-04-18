@@ -66,15 +66,15 @@ export function ConsistencyGraph() {
   const last = days[days.length - 1]?.date ?? "";
 
   return (
-    <div className="rounded-xl border border-surface-border bg-white shadow-sm overflow-hidden">
-      <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-surface-border bg-surface-base">
+    <div className="rounded-2xl border-[3px] border-black bg-white overflow-hidden shadow-nb">
+      <div className="flex items-start justify-between gap-4 px-5 py-4 border-b-[3px] border-black bg-nb-orange">
         <div>
-          <h3 className="text-sm font-semibold text-ink">Consistency</h3>
-          <p className="text-xs text-ink-subtle mt-0.5">Last 30 days · completion over time</p>
+          <h3 className="text-sm font-black text-black">Consistency</h3>
+          <p className="text-xs font-bold text-black/60 mt-0.5">Last 30 days · completion over time</p>
         </div>
         <div className="text-right">
-          <div className="text-2xl font-bold text-brand-600">{avg}%</div>
-          <div className="text-[11px] text-ink-faint">Average</div>
+          <div className="text-2xl font-black text-black">{avg}%</div>
+          <div className="text-[11px] font-bold text-black/60">Average</div>
         </div>
       </div>
 
@@ -87,26 +87,26 @@ export function ConsistencyGraph() {
         >
           <defs>
             <linearGradient id="cgGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#16a34a" stopOpacity="0.15" />
-              <stop offset="100%" stopColor="#16a34a" stopOpacity="0.01" />
+              <stop offset="0%" stopColor="#4D96FF" stopOpacity="0.20" />
+              <stop offset="100%" stopColor="#4D96FF" stopOpacity="0.02" />
             </linearGradient>
           </defs>
           {/* Grid lines */}
-          <line x1={padX} y1={chartH - padY} x2={chartW - padX} y2={chartH - padY} stroke="#e2e8f0" strokeWidth={1} />
-          <line x1={padX} y1={padY + (chartH - padY * 2) * 0.5} x2={chartW - padX} y2={padY + (chartH - padY * 2) * 0.5} stroke="#e2e8f0" strokeWidth={1} strokeDasharray="4 4" />
+          <line x1={padX} y1={chartH - padY} x2={chartW - padX} y2={chartH - padY} stroke="#000" strokeWidth={1.5} />
+          <line x1={padX} y1={padY + (chartH - padY * 2) * 0.5} x2={chartW - padX} y2={padY + (chartH - padY * 2) * 0.5} stroke="#ccc" strokeWidth={1} strokeDasharray="4 4" />
           {/* Area fill */}
           <path d={areaD} fill="url(#cgGrad)" />
           {/* Line */}
           <path
             d={pathD}
             fill="none"
-            stroke="#16a34a"
-            strokeWidth={2}
+            stroke="#4D96FF"
+            strokeWidth={2.5}
             strokeLinejoin="round"
             strokeLinecap="round"
           />
         </svg>
-        <div className="mt-1 flex justify-between text-[11px] tabular-nums text-ink-faint">
+        <div className="mt-1 flex justify-between text-[11px] tabular-nums font-bold text-black/50">
           <span>{first}</span>
           <span>{last}</span>
         </div>

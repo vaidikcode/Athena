@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 const TYPE_COLORS: Record<string, string> = {
-  deep_work: "#16a34a",
+  deep_work: "#4D96FF",
   meeting:   "#4ade80",
   admin:     "#86efac",
   personal:  "#bbf7d0",
@@ -35,10 +35,10 @@ export function LoadChart({ load, className }: Props) {
     .sort(([, a], [, b]) => b - a);
 
   return (
-    <div className={cn("rounded-xl border border-surface-border bg-white p-3 shadow-sm", className)}>
+    <div className={cn("rounded-xl border border-[3px] border-black bg-white p-3 shadow-sm", className)}>
       <div className="flex items-center justify-between mb-2">
-        <p className="text-xs font-semibold text-ink">Load summary</p>
-        <p className="text-[11px] text-ink-faint">{Math.round(total / 60)}h {total % 60}m</p>
+        <p className="text-xs font-bold text-ink">Load summary</p>
+        <p className="text-[11px] text-black/40">{Math.round(total / 60)}h {total % 60}m</p>
       </div>
 
       {total > 0 ? (
@@ -58,7 +58,7 @@ export function LoadChart({ load, className }: Props) {
           {/* Legend */}
           <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
             {segments.map(([type, mins]) => (
-              <span key={type} className="flex items-center gap-1 text-[11px] text-ink-subtle">
+              <span key={type} className="flex items-center gap-1 text-[11px] text-black/60">
                 <span
                   className="inline-block size-2 rounded-sm flex-shrink-0"
                   style={{ background: TYPE_COLORS[type] ?? "#ccc" }}
@@ -69,23 +69,23 @@ export function LoadChart({ load, className }: Props) {
           </div>
         </>
       ) : (
-        <p className="text-athens-small text-athens-blue/50">No events scheduled</p>
+        <p className="text-xs font-bold text-nb-blue/50">No events scheduled</p>
       )}
 
-      <div className="mt-2 flex gap-4 text-[11px] text-athens-blue/60 border-t border-athens-stone pt-2">
+      <div className="mt-2 flex gap-4 text-[11px] text-nb-blue/60 border-t border-black pt-2">
         {load.backToBackCount !== undefined && (
           <span>
-            <strong className="text-athens-blue">{load.backToBackCount}</strong> back-to-back
+            <strong className="text-nb-blue">{load.backToBackCount}</strong> back-to-back
           </span>
         )}
         {load.highPriorityCount !== undefined && (
           <span>
-            <strong className="text-athens-blue">{load.highPriorityCount}</strong> high priority
+            <strong className="text-nb-blue">{load.highPriorityCount}</strong> high priority
           </span>
         )}
         {load.totalEvents !== undefined && (
           <span>
-            <strong className="text-athens-blue">{load.totalEvents}</strong> total events
+            <strong className="text-nb-blue">{load.totalEvents}</strong> total events
           </span>
         )}
       </div>

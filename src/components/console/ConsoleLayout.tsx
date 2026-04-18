@@ -15,7 +15,6 @@ export function ConsoleLayout() {
     day: "numeric",
   });
 
-  // Shared `send` function — Thread provides it; sidebar consumes it
   const [sendFn, setSendFn] = useState<((text: string) => void) | null>(null);
 
   const handleSendReady = useCallback((fn: (text: string) => void) => {
@@ -24,35 +23,33 @@ export function ConsoleLayout() {
 
   return (
     <QueryProvider>
-      <div className="flex h-full min-h-0 flex-col bg-surface-base">
-        {/* Top bar */}
-        <div className="flex shrink-0 items-center justify-between border-b border-surface-border bg-white px-5 py-3">
+      <div className="flex h-full min-h-0 flex-col bg-nb-cream">
+        {/* Top bar — neo-brutalist header */}
+        <div className="flex shrink-0 items-center justify-between border-b-[3px] border-black bg-nb-blue px-5 py-3 shadow-[0px_3px_0px_0px_#000]">
           <div className="flex items-center gap-3">
-            <span className="inline-flex size-2 rounded-full bg-brand-600 animate-pulse" />
-            <span className="text-sm font-semibold text-ink">{today}</span>
+            <span className="inline-flex size-2.5 rounded-full bg-nb-yellow border-[2px] border-black animate-pulse" />
+            <span className="text-sm font-black text-white">{today}</span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1">
-            <Flame className="size-3.5 text-brand-600" />
-            <span className="text-xs font-semibold text-brand-700">
-              {MOCK_METRICS.streakDays} day streak
-            </span>
+          <div className="flex items-center gap-1.5 rounded-full border-[3px] border-black bg-nb-yellow px-3 py-1 shadow-nb-sm">
+            <Flame className="size-3.5 text-black" />
+            <span className="text-xs font-black text-black">{MOCK_METRICS.streakDays} day streak</span>
           </div>
         </div>
 
         {/* 3-column body */}
         <div className="flex min-h-0 flex-1 overflow-hidden">
           {/* Left: Actions + Sources + Rules */}
-          <div className="w-56 shrink-0 border-r border-surface-border bg-white flex flex-col overflow-hidden">
+          <div className="w-56 shrink-0 border-r-[3px] border-black bg-white flex flex-col overflow-hidden">
             <RulesRail onSend={sendFn ?? undefined} />
           </div>
 
           {/* Center: Thread */}
-          <div className="flex min-w-0 flex-1 flex-col overflow-hidden bg-surface-base">
+          <div className="flex min-w-0 flex-1 flex-col overflow-hidden bg-nb-cream">
             <Thread onSendReady={handleSendReady} />
           </div>
 
           {/* Right: Today */}
-          <div className="w-72 shrink-0 border-l border-surface-border bg-white flex flex-col overflow-hidden">
+          <div className="w-72 shrink-0 border-l-[3px] border-black bg-white flex flex-col overflow-hidden">
             <TodayRail />
           </div>
         </div>

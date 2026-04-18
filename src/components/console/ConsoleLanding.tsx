@@ -33,7 +33,7 @@ const QUICK_ACTIONS = [
     label: "Find bottlenecks",
     sub: "Diagnose today's load & conflicts",
     prompt: "Analyse today's schedule: find bottlenecks, rule violations, and conflicts. Use render_day_timeline and find_conflicts widgets.",
-    color: "text-brand-600 bg-brand-50 border-brand-200",
+    color: "text-nb-blue bg-nb-blue/10 border-nb-blue/30",
     accent: "brand",
   },
   {
@@ -136,7 +136,7 @@ export function ConsoleLanding({ onSend }: Props) {
     <div className="mx-auto w-full max-w-2xl space-y-5 px-1 py-4 animate-fade-up">
       {/* ── Greeting ── */}
       <div className="flex items-start gap-3">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-brand-600 shadow-sm mt-0.5">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-nb-blue shadow-sm mt-0.5">
           <Zap className="size-5 text-white" />
         </div>
         <div>
@@ -189,7 +189,7 @@ export function ConsoleLanding({ onSend }: Props) {
                   </div>
                   <span className="text-xs font-medium text-ink flex-1 truncate">{src.label}</span>
                   <span className="flex items-center gap-1 text-[10px] text-ink-faint">
-                    <span className="size-1.5 rounded-full bg-brand-500 inline-block" />
+                    <span className="size-1.5 rounded-full bg-nb-blue/100 inline-block" />
                     {src.eventCount}
                   </span>
                 </li>
@@ -199,7 +199,7 @@ export function ConsoleLanding({ onSend }: Props) {
           <button
             type="button"
             onClick={() => onSend("Fetch signals from all connected sources: emails, Slack, and health stats.")}
-            className="mt-2.5 flex items-center gap-1.5 text-[11px] font-medium text-brand-600 hover:text-brand-700 transition-colors"
+            className="mt-2.5 flex items-center gap-1.5 text-[11px] font-medium text-nb-blue hover:text-nb-blue transition-colors"
           >
             <RefreshCw className="size-3" />
             Sync all sources
@@ -214,8 +214,8 @@ export function ConsoleLanding({ onSend }: Props) {
               Rules engine
             </p>
             <div className="flex items-center gap-2">
-              <div className="flex size-8 items-center justify-center rounded-lg bg-brand-50 border border-brand-200">
-                <ShieldCheck className="size-4 text-brand-600" />
+              <div className="flex size-8 items-center justify-center rounded-lg bg-nb-blue/10 border border-nb-blue/30">
+                <ShieldCheck className="size-4 text-nb-blue" />
               </div>
               <div>
                 <p className="text-sm font-bold text-ink">{ruleCount}</p>
@@ -225,7 +225,7 @@ export function ConsoleLanding({ onSend }: Props) {
             <button
               type="button"
               onClick={() => onSend("List all my active rules and check today's schedule against them.")}
-              className="mt-2 flex items-center gap-1.5 text-[11px] font-medium text-brand-600 hover:text-brand-700 transition-colors"
+              className="mt-2 flex items-center gap-1.5 text-[11px] font-medium text-nb-blue hover:text-nb-blue transition-colors"
             >
               <ArrowRight className="size-3" />
               Audit rules vs today
@@ -256,7 +256,7 @@ export function ConsoleLanding({ onSend }: Props) {
           {CAPS.map(({ Icon, title, items }) => (
             <div key={title} className="rounded-xl border border-surface-border bg-white p-3 shadow-sm">
               <div className="flex items-center gap-1.5 mb-2">
-                <Icon className="size-3.5 text-brand-600 shrink-0" />
+                <Icon className="size-3.5 text-nb-blue shrink-0" />
                 <p className="text-[11px] font-semibold text-ink">{title}</p>
               </div>
               <ul className="space-y-1">
@@ -273,16 +273,16 @@ export function ConsoleLanding({ onSend }: Props) {
       <button
         type="button"
         onClick={() => onSend("Give me a full briefing: today's timeline, bottlenecks, conflicts, rule violations, and top 3 actionable fixes.")}
-        className="group w-full flex items-center gap-3 rounded-xl border-2 border-dashed border-brand-200 bg-brand-50/50 px-4 py-3 text-left hover:border-brand-400 hover:bg-brand-50 transition-all"
+        className="group w-full flex items-center gap-3 rounded-xl border-2 border-dashed border-nb-blue/30 bg-nb-blue/10/50 px-4 py-3 text-left hover:border-nb-blue/60 hover:bg-nb-blue/10 transition-all"
       >
-        <Zap className="size-4 text-brand-600 shrink-0" />
+        <Zap className="size-4 text-nb-blue shrink-0" />
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-semibold text-brand-700">Full briefing</p>
-          <p className="text-[11px] text-brand-600/70 leading-snug">
+          <p className="text-xs font-semibold text-nb-blue">Full briefing</p>
+          <p className="text-[11px] text-nb-blue/70 leading-snug">
             Timeline · conflicts · bottlenecks · rule violations · actionable fixes
           </p>
         </div>
-        <ArrowRight className="size-4 text-brand-600/50 group-hover:text-brand-600 group-hover:translate-x-0.5 transition-all" />
+        <ArrowRight className="size-4 text-nb-blue/50 group-hover:text-nb-blue group-hover:translate-x-0.5 transition-all" />
       </button>
     </div>
   );

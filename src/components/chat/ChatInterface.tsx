@@ -80,42 +80,42 @@ function ToolBlock({ part }: { part: UIMessage["parts"][number] }) {
       <Card
         className={cn(
           "overflow-hidden",
-          toolErr ? "border-athens-stone bg-athens-highlight" : "border-athens-stone bg-athens-highlight/80"
+          toolErr ? "border-black bg-nb-cream" : "border-black bg-nb-cream/80"
         )}
       >
-        <CollapsibleTrigger className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-medium text-athens-blue hover:bg-athens-highlight">
+        <CollapsibleTrigger className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm font-medium text-nb-blue hover:bg-nb-cream">
           {open ? <ChevronDown className="size-4 shrink-0" /> : <ChevronRight className="size-4 shrink-0" />}
-          <span className="font-mono text-xs uppercase tracking-wide text-athens-blue/80">Tool</span>
-          <span className="font-mono text-xs text-athens-blue">{name}</span>
-          <span className="ml-auto rounded-full border border-athens-stone bg-white px-2 py-0.5 text-[10px] font-semibold text-athens-blue">
+          <span className="font-mono text-xs uppercase tracking-wide text-nb-blue/80">Tool</span>
+          <span className="font-mono text-xs text-nb-blue">{name}</span>
+          <span className="ml-auto rounded-full border border-black bg-white px-2 py-0.5 text-[10px] font-semibold text-nb-blue">
             {(typeof p.state === "string" ? p.state : "pending").replace(/-/g, " ")}
           </span>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <div className="space-y-2 border-t border-athens-stone px-3 py-2 text-xs">
+          <div className="space-y-2 border-t border-black px-3 py-2 text-xs">
             {"input" in p && p.input !== undefined && (
               <div>
-                <div className="mb-1 font-semibold text-athens-blue/70">Input</div>
-                <pre className="max-h-40 overflow-auto rounded-md border border-athens-stone bg-white p-2 font-mono text-[11px] text-athens-blue">
+                <div className="mb-1 font-semibold text-nb-blue/70">Input</div>
+                <pre className="max-h-40 overflow-auto rounded-md border border-black bg-white p-2 font-mono text-[11px] text-nb-blue">
                   {typeof p.input === "string" ? p.input : JSON.stringify(p.input, null, 2)}
                 </pre>
               </div>
             )}
             {"output" in p && p.output !== undefined && (
               <div>
-                <div className="mb-1 font-semibold text-athens-blue/70">Result</div>
+                <div className="mb-1 font-semibold text-nb-blue/70">Result</div>
                 {toolErr ? (
-                  <div className="mb-2 rounded-md border border-athens-stone bg-athens-highlight px-2 py-1.5 text-[11px] font-medium text-athens-blue">
+                  <div className="mb-2 rounded-md border border-black bg-nb-cream px-2 py-1.5 text-[11px] font-medium text-nb-blue">
                     Tool did not apply: {toolErr}
                   </div>
                 ) : null}
-                <pre className="max-h-60 overflow-auto rounded-md border border-athens-stone bg-white p-2 font-mono text-[11px] text-athens-blue">
+                <pre className="max-h-60 overflow-auto rounded-md border border-black bg-white p-2 font-mono text-[11px] text-nb-blue">
                   {typeof p.output === "string" ? p.output : JSON.stringify(p.output, null, 2)}
                 </pre>
               </div>
             )}
             {"errorText" in p && p.errorText && (
-              <div className="rounded-md border border-athens-stone bg-athens-highlight p-2 font-mono text-athens-blue">
+              <div className="rounded-md border border-black bg-nb-cream p-2 font-mono text-nb-blue">
                 {p.errorText}
               </div>
             )}
@@ -139,7 +139,7 @@ function MessageBubble({ message }: { message: UIMessage }) {
               key={`txt-${message.id}-${i}`}
               className={cn(
                 "max-w-[min(720px,92%)] rounded-2xl px-4 py-3 text-sm shadow-sm ring-1",
-                isUser ? "bg-athens-blue text-white ring-athens-blue/30" : "bg-white text-athens-blue ring-athens-stone"
+                isUser ? "bg-nb-blue text-white ring-athens-blue/30" : "bg-white text-nb-blue ring-athens-stone"
               )}
             >
               <div className={cn("whitespace-pre-wrap leading-relaxed", isUser && "text-white")}>{part.text}</div>
@@ -150,10 +150,10 @@ function MessageBubble({ message }: { message: UIMessage }) {
           return (
             <details
               key={`re-${message.id}-${i}`}
-              className="w-full max-w-[min(720px,100%)] rounded-lg border border-athens-stone bg-athens-highlight/90 px-3 py-2 text-left text-xs text-athens-blue shadow-sm"
+              className="w-full max-w-[min(720px,100%)] rounded-lg border border-black bg-nb-cream/90 px-3 py-2 text-left text-xs text-nb-blue shadow-sm"
             >
-              <summary className="cursor-pointer select-none font-medium text-athens-blue/60">Model reasoning</summary>
-              <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-athens-blue/75">
+              <summary className="cursor-pointer select-none font-medium text-nb-blue/60">Model reasoning</summary>
+              <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-nb-blue/75">
                 {part.text}
               </pre>
             </details>
@@ -200,10 +200,10 @@ export function ChatInterface({ autoStart = false }: { autoStart?: boolean }) {
   const busy = status === "streaming" || status === "submitted";
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-athens-stone">
-      <div className="border-b border-athens-stone bg-white px-6 py-4">
-        <h1 className="text-athens-title text-athens-blue">Athena Coach</h1>
-        <p className="text-athens-small font-light text-athens-blue/70">
+    <div className="flex h-full min-h-0 flex-col bg-black/20">
+      <div className="border-b border-black bg-white px-6 py-4">
+        <h1 className="text-black text-nb-blue">Athena Coach</h1>
+        <p className="text-black font-light text-nb-blue/70">
           {autoStart
             ? "Your AI coach analyses your schedule, rules, and data sources to give you a personalised daily brief."
             : <>Describe what feels off — Athena reads <strong>today</strong>, finds bottlenecks and rule clashes, and can fix your calendar directly.</>
@@ -212,7 +212,7 @@ export function ChatInterface({ autoStart = false }: { autoStart?: boolean }) {
       </div>
 
       {error != null && (
-        <div className="border-b border-athens-stone bg-athens-highlight px-6 py-3 text-sm text-athens-blue">
+        <div className="border-b border-black bg-nb-cream px-6 py-3 text-sm text-nb-blue">
           <div className="mx-auto flex max-w-3xl items-start justify-between gap-3">
             <p className="min-w-0 flex-1 leading-snug">{formatUnknownError(error)}</p>
             <Button type="button" variant="outline" size="sm" className="shrink-0" onClick={() => clearError()}>
@@ -226,9 +226,9 @@ export function ChatInterface({ autoStart = false }: { autoStart?: boolean }) {
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         <div className="mx-auto flex max-w-3xl flex-col gap-4 pb-8">
           {messages.length === 0 && !busy && (
-            <Card className="border-dashed border-athens-stone bg-white p-6 text-center text-sm font-light text-athens-blue/70">
+            <Card className="border-dashed border-black bg-white p-6 text-center text-sm font-light text-nb-blue/70">
               {autoStart
-                ? <span className="flex items-center justify-center gap-2"><Loader2 className="size-4 animate-spin text-athens-blue" /> Starting your briefing…</span>
+                ? <span className="flex items-center justify-center gap-2"><Loader2 className="size-4 animate-spin text-nb-blue" /> Starting your briefing…</span>
                 : <>Try: "Where is my schedule broken today?" or "Suggest a rule so this doesn&apos;t happen again."</>
               }
             </Card>
@@ -237,8 +237,8 @@ export function ChatInterface({ autoStart = false }: { autoStart?: boolean }) {
             <MessageBubble key={m.id} message={m} />
           ))}
           {busy && (
-            <div className="flex items-center gap-2 text-sm font-light text-athens-blue/65">
-              <Loader2 className="size-4 animate-spin text-athens-blue" />
+            <div className="flex items-center gap-2 text-sm font-light text-nb-blue/65">
+              <Loader2 className="size-4 animate-spin text-nb-blue" />
               Working…
             </div>
           )}
@@ -249,7 +249,7 @@ export function ChatInterface({ autoStart = false }: { autoStart?: boolean }) {
       <Separator />
 
       <form
-        className="border-t border-athens-stone bg-white p-4"
+        className="border-t border-black bg-white p-4"
         onSubmit={(e) => {
           e.preventDefault();
           const t = text.trim();

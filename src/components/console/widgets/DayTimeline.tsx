@@ -98,12 +98,12 @@ export function DayTimeline({ events, date, onEventClick }: Props) {
   })();
 
   return (
-    <div className="rounded-xl border border-surface-border bg-white overflow-hidden shadow-sm">
-      <div className="px-3 py-2.5 border-b border-surface-border bg-surface-base">
-        <p className="text-xs font-semibold text-ink">
+    <div className="rounded-xl border border-[3px] border-black bg-white overflow-hidden shadow-sm">
+      <div className="px-3 py-2.5 border-b border-surface-border bg-nb-cream">
+        <p className="text-xs font-bold text-ink">
           {day.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" })}
         </p>
-        <p className="text-[11px] text-ink-faint">{events.length} events</p>
+        <p className="text-[11px] text-black/40">{events.length} events</p>
       </div>
       <div className="relative overflow-y-auto" style={{ maxHeight: 360 }}>
         <div style={{ position: "relative", height: HOURS.length * ROW_H + ROW_H }}>
@@ -115,7 +115,7 @@ export function DayTimeline({ events, date, onEventClick }: Props) {
               className="border-t border-surface-border/60"
             >
               <span
-                className="text-ink-faint select-none"
+                className="text-black/40 select-none"
                 style={{ position: "absolute", left: 4, top: 2, width: TIME_W - 8, fontSize: 10 }}
               >
                 {h.toString().padStart(2, "0")}:00
@@ -132,7 +132,7 @@ export function DayTimeline({ events, date, onEventClick }: Props) {
                 left: TIME_W,
                 right: 0,
                 height: 2,
-                background: "#16a34a",
+                background: "#4D96FF",
                 opacity: 0.7,
                 zIndex: 10,
               }}
@@ -165,7 +165,7 @@ export function DayTimeline({ events, date, onEventClick }: Props) {
                     transition: "transform 0.1s",
                   }}
                   className={cn(
-                    "flex flex-col items-start overflow-hidden rounded-sm px-1.5 py-0.5 text-left text-[11px] font-semibold shadow-sm cursor-pointer",
+                    "flex flex-col items-start overflow-hidden rounded-sm px-1.5 py-0.5 text-left text-[11px] font-bold shadow-sm cursor-pointer",
                     p.isConflict && "ring-1 ring-red-400"
                   )}
                 >

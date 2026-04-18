@@ -16,7 +16,7 @@ export function ConflictPair({ pairA, pairB, onSendMessage }: Props) {
     <div className="rounded-lg border border-red-200 bg-red-50/50 overflow-hidden">
       <div className="flex items-center gap-2 px-3 py-2 border-b border-red-200 bg-red-50">
         <AlertTriangle className="size-4 text-red-500 shrink-0" />
-        <p className="text-athens-small font-semibold text-red-700">Scheduling conflict</p>
+        <p className="text-xs font-bold font-semibold text-white">Scheduling conflict</p>
       </div>
       <div className="p-3 space-y-2">
         <EventCard event={pairA} onSendMessage={onSendMessage} compact />
@@ -54,7 +54,7 @@ export function ConflictPair({ pairA, pairB, onSendMessage }: Props) {
           <Button
             size="sm"
             variant="ghost"
-            className="h-7 rounded-full text-xs text-athens-blue/60"
+            className="h-7 rounded-full text-xs text-nb-blue/60"
             onClick={() =>
               onSendMessage(
                 `Cancel event "${pairA.title}" (${pairA.id}) to resolve the conflict with "${pairB.title}" (${pairB.id}).`

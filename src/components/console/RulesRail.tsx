@@ -59,7 +59,7 @@ const QUICK: Array<{
     label: "Find bottlenecks",
     prompt:
       "Analyse today's schedule: find bottlenecks, rule violations, and conflicts. Use render_day_timeline and find_conflicts widgets.",
-    color: "text-brand-600",
+    color: "text-nb-blue",
   },
   {
     icon: CalendarDays,
@@ -104,7 +104,7 @@ const QUICK: Array<{
     label: "Full briefing",
     prompt:
       "Give me a full briefing: today's timeline, bottlenecks, conflicts, rule violations, and top 3 actionable fixes.",
-    color: "text-brand-700",
+    color: "text-nb-blue",
   },
 ];
 
@@ -125,7 +125,7 @@ function PriorityBar({ priority }: { priority: number }) {
           key={s}
           className={cn(
             "inline-block h-1.5 w-2.5 rounded-sm",
-            s <= filled ? "bg-brand-600" : "bg-surface-border"
+            s <= filled ? "bg-nb-blue" : "bg-surface-border"
           )}
         />
       ))}
@@ -160,7 +160,7 @@ function RuleRow({ rule, onToggle, onSave }: RuleRowProps) {
       className={cn(
         "rounded-lg border p-2 transition-all",
         rule.enabled
-          ? "border-surface-border bg-white hover:border-brand-200"
+          ? "border-surface-border bg-white hover:border-nb-blue/40"
           : "border-surface-border/50 bg-surface-base opacity-50"
       )}
     >
@@ -169,7 +169,7 @@ function RuleRow({ rule, onToggle, onSave }: RuleRowProps) {
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded border border-surface-border bg-surface-base px-2 py-1 text-[11px] text-ink focus:outline-none focus:ring-1 focus:ring-brand-600/30"
+            className="w-full rounded border border-surface-border bg-surface-base px-2 py-1 text-[11px] text-ink focus:outline-none focus:ring-1 focus:ring-nb-blue/30"
           />
           <Textarea
             value={body}
@@ -201,7 +201,7 @@ function RuleRow({ rule, onToggle, onSave }: RuleRowProps) {
               {rule.body}
             </p>
             {rule.source === "agent" && (
-              <span className="mt-1 inline-block text-[9px] font-semibold text-brand-600 bg-brand-50 rounded px-1">
+              <span className="mt-1 inline-block text-[9px] font-semibold text-nb-blue bg-nb-blue rounded px-1">
                 AI
               </span>
             )}
@@ -218,7 +218,7 @@ function RuleRow({ rule, onToggle, onSave }: RuleRowProps) {
               type="button"
               className={cn(
                 "p-0.5 rounded transition-colors",
-                rule.enabled ? "text-brand-600" : "text-ink-faint hover:text-ink"
+                rule.enabled ? "text-nb-blue" : "text-ink-faint hover:text-ink"
               )}
               onClick={() => onToggle(rule.id, !rule.enabled)}
             >
@@ -251,9 +251,9 @@ function SectionHeader({
     <button
       type="button"
       onClick={onToggle}
-      className="flex w-full items-center justify-between px-3 py-2 border-b border-surface-border bg-surface-base hover:bg-surface-base/80 transition-colors"
+      className="flex w-full items-center justify-between px-3 py-2 border-b border-b-[3px] border-black bg-nb-yellow/40 hover:bg-nb-yellow/60 transition-colors"
     >
-      <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
+      <span className="text-[11px] font-black uppercase tracking-wider text-black">
         {label}
       </span>
       <div className="flex items-center gap-1.5">
@@ -342,10 +342,10 @@ export function RulesRail({
               type="button"
               disabled={!onSend}
               onClick={() => onSend?.(prompt)}
-              className="group flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left transition-colors hover:bg-surface-base disabled:opacity-40"
+              className="group flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left transition-colors hover:bg-nb-yellow/30 hover:border hover:border-black disabled:opacity-40"
             >
               <Icon className={cn("size-3.5 shrink-0", color)} />
-              <span className="text-[11px] font-medium text-ink">{label}</span>
+              <span className="text-[11px] font-bold text-black">{label}</span>
             </button>
           ))}
         </div>
@@ -367,13 +367,13 @@ export function RulesRail({
                 key={src.id}
                 className={cn(
                   "group flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors",
-                  connected ? "hover:bg-surface-base" : "opacity-60"
+                  connected ? "hover:bg-nb-yellow/30" : "opacity-60"
                 )}
               >
                 <div
                   className={cn(
                     "flex size-5 shrink-0 items-center justify-center rounded text-[9px] font-bold transition-all",
-                    connected ? src.color : "bg-surface-border text-ink-faint"
+                    connected ? src.color : "bg-black/20 text-ink-faint"
                   )}
                 >
                   {src.abbr}
@@ -385,7 +385,7 @@ export function RulesRail({
                 {connected ? (
                   <>
                     <span className="flex items-center gap-1 text-[10px] text-ink-faint shrink-0 group-hover:hidden">
-                      <span className="size-1.5 rounded-full bg-brand-500 inline-block" />
+                      <span className="size-1.5 rounded-full bg-nb-green inline-block" />
                       {src.eventCount}
                     </span>
                     {confirming ? (
@@ -393,7 +393,7 @@ export function RulesRail({
                         <button
                           type="button"
                           onClick={() => { revoke(src.id as SourceId); setRevokeConfirm(null); }}
-                          className="text-[10px] font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100 rounded px-1.5 py-0.5 transition-colors"
+                          className="text-[10px] font-semibold  bg-nb-coral text-white border border-black rounded px-1.5 py-0.5 transition-colors"
                         >
                           Yes, revoke
                         </button>
@@ -420,7 +420,7 @@ export function RulesRail({
                   <button
                     type="button"
                     onClick={() => reconnect(src.id as SourceId)}
-                    className="flex items-center gap-1 text-[10px] font-medium text-brand-600 hover:text-brand-700 transition-colors shrink-0"
+                    className="flex items-center gap-1 text-[10px] font-medium text-nb-blue hover:text-nb-blue transition-colors shrink-0"
                     title="Reconnect"
                   >
                     <PlugZap className="size-3" />
@@ -434,7 +434,7 @@ export function RulesRail({
             type="button"
             disabled={!onSend}
             onClick={() => onSend?.("Fetch signals from all connected sources: emails, Slack, and health stats.")}
-            className="flex items-center gap-1.5 mt-1 px-2 text-[11px] font-medium text-brand-600 hover:text-brand-700 transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 mt-1 px-2 text-[11px] font-bold text-nb-blue hover:text-blue-700 transition-colors disabled:opacity-40"
           >
             <RefreshCw className="size-3" />
             Sync all
@@ -455,7 +455,7 @@ export function RulesRail({
               setRulesOpen(true);
               setAdding((v) => !v);
             }}
-            className="rounded p-0.5 text-ink-faint hover:text-brand-600 hover:bg-brand-50 transition-colors"
+            className="rounded p-0.5 text-ink-faint hover:text-nb-blue hover:bg-nb-blue transition-colors"
             title="Add rule"
           >
             <Plus className="size-3" />
@@ -469,13 +469,13 @@ export function RulesRail({
           )}
 
           {adding && (
-            <div className="rounded-lg border-2 border-dashed border-brand-200 bg-brand-50/50 p-2 space-y-1.5">
+            <div className="rounded-lg border-2 border-dashed border-nb-blue/40 bg-nb-blue/50 p-2 space-y-1.5">
               <input
                 autoFocus
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 placeholder="Rule title…"
-                className="w-full rounded border border-surface-border bg-white px-2 py-1 text-[11px] text-ink focus:outline-none focus:ring-1 focus:ring-brand-600/30"
+                className="w-full rounded border border-surface-border bg-white px-2 py-1 text-[11px] text-ink focus:outline-none focus:ring-1 focus:ring-nb-blue/30"
               />
               <Textarea
                 value={newBody}

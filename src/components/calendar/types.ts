@@ -39,22 +39,22 @@ export interface CalEventLog {
 
 export type CalView = "month" | "week" | "day";
 
-/** White + Green palette */
+/** Neo-brutalist palette */
 export const TYPE_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  deep_work: { bg: "#16a34a", text: "#ffffff", border: "#15803d" },
-  meeting:   { bg: "#4ade80", text: "#14532d", border: "#22c55e" },
-  admin:     { bg: "#dcfce7", text: "#15803d", border: "#bbf7d0" },
-  personal:  { bg: "#f0fdf4", text: "#16a34a", border: "#dcfce7" },
-  health:    { bg: "#15803d", text: "#ffffff", border: "#14532d" },
-  learning:  { bg: "#86efac", text: "#14532d", border: "#4ade80" },
-  social:    { bg: "#bbf7d0", text: "#15803d", border: "#86efac" },
-  other:     { bg: "#f8fafc", text: "#475569", border: "#e2e8f0" },
+  deep_work: { bg: "#4D96FF", text: "#ffffff", border: "#000000" },
+  meeting:   { bg: "#A29BFE", text: "#000000", border: "#000000" },
+  admin:     { bg: "#FFD93D", text: "#000000", border: "#000000" },
+  personal:  { bg: "#FFFBF0", text: "#000000", border: "#000000" },
+  health:    { bg: "#FF6B6B", text: "#ffffff", border: "#000000" },
+  learning:  { bg: "#6BCB77", text: "#000000", border: "#000000" },
+  social:    { bg: "#FF9F43", text: "#000000", border: "#000000" },
+  other:     { bg: "#f0f0f0", text: "#333333", border: "#ccc" },
 };
 
 export const ENERGY_DOT: Record<string, string> = {
-  low:    "#86efac",
-  medium: "#22c55e",
-  high:   "#15803d",
+  low:    "#6BCB77",
+  medium: "#FFD93D",
+  high:   "#FF6B6B",
 };
 
 export function formatTime(iso: string): string {

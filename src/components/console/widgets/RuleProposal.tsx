@@ -37,16 +37,16 @@ export function RuleProposal({ toolCallId, rule, addToolResult }: Props) {
 
   if (applied === "accepted") {
     return (
-      <div className="flex items-center gap-2 rounded-xl border border-brand-200 bg-brand-50 px-3 py-2.5">
-        <Check className="size-4 text-brand-600 shrink-0" />
-        <p className="text-xs text-brand-700 font-medium">Rule "{title}" accepted and being created…</p>
+      <div className="flex items-center gap-2 rounded-xl border border-nb-blue/30 bg-nb-blue/10 px-3 py-2.5">
+        <Check className="size-4 text-nb-blue shrink-0" />
+        <p className="text-xs text-nb-blue font-medium">Rule "{title}" accepted and being created…</p>
       </div>
     );
   }
 
   if (applied === "dismissed") {
     return (
-      <div className="flex items-center gap-2 rounded-xl border border-surface-border bg-surface-base px-3 py-2.5">
+      <div className="flex items-center gap-2 rounded-xl border-[2px] border-black bg-nb-cream px-3 py-2.5">
         <X className="size-4 text-ink-faint shrink-0" />
         <p className="text-xs text-ink-subtle">Rule proposal dismissed.</p>
       </div>
@@ -54,10 +54,10 @@ export function RuleProposal({ toolCallId, rule, addToolResult }: Props) {
   }
 
   return (
-    <div className="rounded-xl border-2 border-brand-200 bg-white overflow-hidden shadow-sm">
-      <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-brand-200 bg-brand-50">
-        <Shield className="size-4 text-brand-600 shrink-0" />
-        <p className="text-xs font-semibold text-brand-800">Proposed rule — review before saving</p>
+    <div className="rounded-xl border-2 border-nb-blue/30 bg-white overflow-hidden shadow-sm">
+      <div className="flex items-center gap-2 px-3.5 py-2.5 border-b border-nb-blue/30 bg-nb-blue/10">
+        <Shield className="size-4 text-nb-blue shrink-0" />
+        <p className="text-xs font-bold text-nb-blue">Proposed rule — review before saving</p>
       </div>
       <div className="p-3.5 space-y-3">
         <div>
@@ -65,7 +65,7 @@ export function RuleProposal({ toolCallId, rule, addToolResult }: Props) {
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-lg border border-surface-border bg-surface-base px-3 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-brand-600/30"
+            className="w-full rounded-lg border-[2px] border-black bg-nb-cream px-3 py-1.5 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-nb-blue/30"
           />
         </div>
         <div>
@@ -86,12 +86,12 @@ export function RuleProposal({ toolCallId, rule, addToolResult }: Props) {
             onChange={(e) => setPriority(Number(e.target.value))}
             className="flex-1 accent-brand-600"
           />
-          <span className="text-xs font-semibold text-brand-700 w-4">{priority}</span>
+          <span className="text-xs font-bold text-nb-blue w-4">{priority}</span>
         </div>
         {rule.tags && rule.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {rule.tags.map((t) => (
-              <span key={t} className="text-[11px] rounded-full px-2 py-0.5 border border-brand-200 bg-brand-50 text-brand-700">
+              <span key={t} className="text-[11px] rounded-full px-2 py-0.5 border border-nb-blue/30 bg-nb-blue/10 text-nb-blue">
                 {t}
               </span>
             ))}

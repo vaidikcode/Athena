@@ -70,40 +70,40 @@ export function MetricModal({ metric, value, max, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-athens-blue/25 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-nb-blue/25 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative mx-4 w-full max-w-lg overflow-hidden rounded-2xl border border-athens-stone bg-white shadow-2xl">
-        <div className="flex items-center gap-3 border-b border-athens-stone px-6 py-5">
+      <div className="relative mx-4 w-full max-w-lg overflow-hidden rounded-2xl border border-black bg-white shadow-2xl">
+        <div className="flex items-center gap-3 border-b border-black px-6 py-5">
           <div
             className={cn(
-              "flex size-9 items-center justify-center rounded-xl border border-athens-stone",
-              isLow ? "bg-athens-highlight" : "bg-athens-highlight"
+              "flex size-9 items-center justify-center rounded-xl border border-black",
+              isLow ? "bg-nb-cream" : "bg-nb-cream"
             )}
           >
-            <Sparkles className={cn("size-4", isLow ? "text-athens-blue/55" : "text-athens-blue")} />
+            <Sparkles className={cn("size-4", isLow ? "text-nb-blue/55" : "text-nb-blue")} />
           </div>
           <div className="flex-1">
-            <div className="text-sm font-semibold text-athens-blue">{humanLabel(metric)}</div>
-            <div className="text-xs font-light text-athens-blue/65">
+            <div className="text-sm font-semibold text-nb-blue">{humanLabel(metric)}</div>
+            <div className="text-xs font-light text-nb-blue/65">
               {value}/{max} · {pct}% · {isLow ? "Below target — " : "On track — "}suggestions
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-athens-blue/50 hover:bg-athens-highlight hover:text-athens-blue"
+            className="rounded-lg p-1.5 text-nb-blue/50 hover:bg-nb-cream hover:text-nb-blue"
           >
             <X className="size-4" />
           </button>
         </div>
 
         <div className="px-6 pb-2 pt-4">
-          <div className="h-1.5 w-full rounded-full bg-athens-stone">
+          <div className="h-1.5 w-full rounded-full bg-black/20">
             <div
-              className={cn("h-full rounded-full bg-athens-blue transition-all", isLow && "opacity-50")}
+              className={cn("h-full rounded-full bg-nb-blue transition-all", isLow && "opacity-50")}
               style={{ width: `${pct}%` }}
             />
           </div>
@@ -111,24 +111,24 @@ export function MetricModal({ metric, value, max, onClose }: Props) {
 
         <div className="max-h-[420px] min-h-[200px] overflow-y-auto px-6 py-4">
           {loading && (
-            <div className="flex items-center gap-2 text-sm font-light text-athens-blue/70">
-              <Loader2 className="size-4 animate-spin text-athens-blue" />
+            <div className="flex items-center gap-2 text-sm font-light text-nb-blue/70">
+              <Loader2 className="size-4 animate-spin text-nb-blue" />
               Analysing your data…
             </div>
           )}
           {error && (
-            <div className="rounded-lg border border-athens-stone bg-athens-highlight px-3 py-2 text-sm text-athens-blue">
+            <div className="rounded-lg border border-black bg-nb-cream px-3 py-2 text-sm text-nb-blue">
               {error}
             </div>
           )}
-          {text && <div className="whitespace-pre-wrap text-sm font-light leading-relaxed text-athens-blue">{text}</div>}
+          {text && <div className="whitespace-pre-wrap text-sm font-light leading-relaxed text-nb-blue">{text}</div>}
         </div>
 
-        <div className="flex justify-end border-t border-athens-stone px-6 py-4">
+        <div className="flex justify-end border-t border-black px-6 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl bg-athens-blue px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-athens-blue/90"
+            className="rounded-xl bg-nb-blue px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-nb-blue/90"
           >
             Got it
           </button>

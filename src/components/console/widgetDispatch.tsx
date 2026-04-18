@@ -191,14 +191,14 @@ export function dispatchWidget(part: ToolPart, ctx: WidgetContext): React.ReactN
     const logs = Array.isArray(output) ? output : (output.logs as unknown[] | undefined) ?? [];
     if (logs.length === 0) return null;
     return (
-      <div className="rounded-xl border border-surface-border bg-white overflow-hidden shadow-sm">
-        <div className="px-3.5 py-2.5 border-b border-surface-border bg-surface-base">
-          <p className="text-xs font-semibold text-ink">Event history ({logs.length})</p>
+      <div className="rounded-xl border border-[3px] border-black bg-white overflow-hidden shadow-sm">
+        <div className="px-3.5 py-2.5 border-b border-surface-border bg-nb-cream">
+          <p className="text-xs font-bold text-ink">Event history ({logs.length})</p>
         </div>
         <ul className="divide-y divide-surface-border/60 max-h-48 overflow-y-auto">
           {(logs as Array<Record<string, unknown>>).map((log, i) => (
             <li key={i} className="px-3.5 py-1.5 flex items-center gap-3 text-[11px] text-ink-subtle">
-              <span className="font-semibold text-ink capitalize">{String(log.action ?? "")}</span>
+              <span className="font-bold text-ink capitalize">{String(log.action ?? "")}</span>
               <span className="text-ink-faint">·</span>
               <span>{String(log.actor ?? "")}</span>
               <span className="ml-auto text-ink-faint">

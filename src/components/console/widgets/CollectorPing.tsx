@@ -52,13 +52,13 @@ export function CollectorPing({ toolName, output, className }: Props) {
   return (
     <div
       className={cn(
-        "flex items-center gap-2 rounded-md border border-athens-stone/70 bg-athens-highlight/40 px-3 py-1.5 text-[11px] text-athens-blue/65",
+        "flex items-center gap-2 rounded-md border border-black/70 bg-nb-cream/40 px-3 py-1.5 text-[11px] text-nb-blue/65",
         className
       )}
     >
       {icon}
       <span className="font-semibold">{label}</span>
-      <span className="text-athens-blue/45">·</span>
+      <span className="text-nb-blue/45">·</span>
       <span className="truncate">{summary}</span>
     </div>
   );

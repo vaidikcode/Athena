@@ -55,14 +55,14 @@ function formatErr(e: unknown): string {
 function FormattedText({ text }: { text: string }) {
   const blocks = text.trim().split(/\n\n+/);
   return (
-    <div className="space-y-2 text-sm text-ink leading-relaxed">
+    <div className="space-y-2 text-sm font-semibold text-black leading-relaxed">
       {blocks.map((block, i) => {
         const lines = block.split("\n").map((l) => l.trim()).filter(Boolean);
         const allBullets = lines.length > 0 && lines.every((l) => /^[-*•]\s/.test(l));
         const allNumbered = lines.length > 0 && lines.every((l) => /^\d+\.\s/.test(l));
         if (allBullets) {
           return (
-            <ul key={i} className="list-disc pl-5 space-y-1 marker:text-brand-600">
+            <ul key={i} className="list-disc pl-5 space-y-1 marker:text-nb-blue">
               {lines.map((l, j) => (
                 <li key={j} className="pl-0.5">{l.replace(/^[-*•]\s+/, "")}</li>
               ))}
@@ -71,7 +71,7 @@ function FormattedText({ text }: { text: string }) {
         }
         if (allNumbered) {
           return (
-            <ol key={i} className="list-decimal pl-5 space-y-1 marker:font-semibold marker:text-brand-600">
+            <ol key={i} className="list-decimal pl-5 space-y-1 marker:font-black marker:text-nb-blue">
               {lines.map((l, j) => (
                 <li key={j} className="pl-0.5">{l.replace(/^\d+\.\s+/, "")}</li>
               ))}
@@ -164,10 +164,10 @@ export function Thread({
   };
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-surface-base">
+    <div className="flex h-full min-h-0 flex-col bg-nb-cream">
       {/* Error bar */}
       {error != null && (
-        <div className="border-b border-red-200 bg-red-50 px-4 py-2 text-xs text-red-700">
+        <div className="border-b-[3px] border-black bg-nb-coral px-4 py-2 text-xs font-bold text-white">
           {formatErr(error)}
         </div>
       )}
@@ -176,20 +176,20 @@ export function Thread({
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         <div className="mx-auto flex max-w-2xl flex-col gap-3 pb-8">
           {messages.length === 0 && busy && (
-            <div className="flex items-center justify-center gap-2 py-8 text-sm text-ink-subtle">
-              <Loader2 className="size-4 animate-spin text-brand-600" />
+            <div className="flex items-center justify-center gap-2 py-8 text-sm font-bold text-black/60">
+              <Loader2 className="size-4 animate-spin text-nb-blue" />
               Thinking…
             </div>
           )}
 
           {messages.length === 0 && !busy && (
-            <div className="flex flex-col items-center justify-center gap-3 py-16 text-center animate-fade-up">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-brand-600 shadow-sm">
-                <Zap className="size-5 text-white" />
+            <div className="flex flex-col items-center justify-center gap-4 py-16 text-center animate-fade-up">
+              <div className="flex size-14 items-center justify-center rounded-2xl border-[3px] border-black bg-nb-yellow shadow-nb">
+                <Zap className="size-7 text-black" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-ink">Console ready</p>
-                <p className="text-xs text-ink-faint mt-1">
+                <p className="text-base font-black text-black">Console ready</p>
+                <p className="text-sm font-semibold text-black/50 mt-1">
                   Pick an action from the sidebar or type below
                 </p>
               </div>
@@ -203,7 +203,7 @@ export function Thread({
             return (
               <div key={m.id} className={cn("flex flex-col gap-2 animate-fade-up", isUser ? "items-end" : "items-start w-full max-w-2xl")}>
                 {isUser && (
-                  <div className="max-w-[85%] rounded-2xl bg-brand-600 px-4 py-2.5 text-white text-sm shadow-sm">
+                  <div className="max-w-[85%] rounded-2xl border-[3px] border-black bg-nb-blue px-4 py-2.5 text-white text-sm font-bold shadow-nb-sm">
                     {parts.filter(isTextUIPart).map((p, i) => (
                       <p key={i} className="whitespace-pre-wrap leading-relaxed">{p.text}</p>
                     ))}
@@ -216,7 +216,7 @@ export function Thread({
                       // Text blocks
                       if (isTextUIPart(part) && part.text.trim()) {
                         return (
-                          <div key={`txt-${i}`} className="rounded-xl bg-white border border-surface-border px-4 py-3 shadow-sm">
+                          <div key={`txt-${i}`} className="rounded-2xl border-[3px] border-black bg-white px-4 py-3 shadow-nb-sm">
                             <FormattedText text={part.text} />
                           </div>
                         );
@@ -227,12 +227,12 @@ export function Thread({
                         return (
                           <details
                             key={`re-${i}`}
-                            className="rounded-lg border border-surface-border bg-surface-base px-3 py-2 text-xs text-ink-subtle"
+                            className="rounded-xl border-[2px] border-black bg-nb-cream px-3 py-2 text-xs"
                           >
-                            <summary className="cursor-pointer select-none font-medium text-ink-faint">
+                            <summary className="cursor-pointer select-none font-black text-black/60">
                               Reasoning
                             </summary>
-                            <pre className="mt-2 max-h-40 overflow-auto whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-ink-faint">
+                            <pre className="mt-2 max-h-40 overflow-auto whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-black/50">
                               {part.text}
                             </pre>
                           </details>
@@ -262,9 +262,9 @@ export function Thread({
                             return <div key={`tool-${i}`} className="animate-fade-up">{widget}</div>;
                           }
                           return (
-                            <div key={`tool-${i}`} className="flex items-center gap-2 rounded-lg border border-surface-border bg-white px-3 py-2">
-                              <Loader2 className="size-3 animate-spin text-brand-600 shrink-0" />
-                              <span className="text-xs text-ink-subtle font-mono">{name.replace(/_/g, " ")}</span>
+                            <div key={`tool-${i}`} className="flex items-center gap-2 rounded-xl border-[2px] border-black bg-white px-3 py-2 shadow-nb-sm">
+                              <Loader2 className="size-3 animate-spin text-nb-blue shrink-0" />
+                              <span className="text-xs font-bold font-mono">{name.replace(/_/g, " ")}</span>
                             </div>
                           );
                         }
@@ -277,10 +277,10 @@ export function Thread({
                         // Fallback: skip raw JSON dump for collector tools, show minimal for others
                         if (p.state === "output-available") {
                           return (
-                            <div key={`tool-${i}`} className="flex items-center gap-2 rounded-lg border border-surface-border bg-white px-3 py-2">
-                              <span className="inline-block size-1.5 rounded-full bg-brand-600/50 shrink-0" />
-                              <span className="text-xs text-ink-subtle font-mono">{name.replace(/_/g, " ")}</span>
-                              <span className="text-xs text-ink-faint">done</span>
+                            <div key={`tool-${i}`} className="flex items-center gap-2 rounded-xl border-[2px] border-black bg-white px-3 py-2 shadow-nb-sm">
+                              <span className="inline-block size-2 rounded-full bg-nb-green shrink-0" />
+                              <span className="text-xs font-bold font-mono">{name.replace(/_/g, " ")}</span>
+                              <span className="text-xs text-black/40 font-bold">done</span>
                             </div>
                           );
                         }
@@ -296,15 +296,15 @@ export function Thread({
           })}
 
           {busy && (
-            <div className="flex items-center gap-2 text-xs text-ink-subtle">
-              <Loader2 className="size-4 animate-spin text-brand-600" />
+            <div className="flex items-center gap-2 text-xs font-bold text-black/60">
+              <Loader2 className="size-4 animate-spin text-nb-blue" />
               Working…
             </div>
           )}
 
           {/* Inline SlotPicker if user tapped Reschedule on an EventCard */}
           {reschedulingEvent && (
-            <div className="rounded-xl border border-surface-border bg-white p-3 animate-fade-up">
+            <div className="rounded-2xl border-[3px] border-black bg-white p-3 animate-fade-up shadow-nb-sm">
               <SlotPicker
                 eventId={reschedulingEvent.id}
                 eventTitle={reschedulingEvent.title}
@@ -316,7 +316,7 @@ export function Thread({
               />
               <button
                 type="button"
-                className="mt-2 text-xs text-ink-faint underline hover:text-brand-600 transition-colors"
+                className="mt-2 text-xs font-bold text-black/40 underline hover:text-nb-blue transition-colors"
                 onClick={() => send(`Suggest free slots to reschedule "${reschedulingEvent.title}" (${reschedulingEvent.id}) today.`)}
               >
                 Ask for slot suggestions
@@ -329,7 +329,7 @@ export function Thread({
       </div>
 
       {/* Input bar */}
-      <div className="border-t border-surface-border bg-white p-3">
+      <div className="border-t-[3px] border-black bg-white p-3 shadow-[0px_-3px_0px_0px_rgba(0,0,0,0.06)]">
         <div className="mx-auto flex max-w-2xl gap-2 items-end">
           <Textarea
             value={text}
@@ -363,7 +363,7 @@ export function Thread({
               </Button>
             )}
             {messages.length > 0 && !busy && (
-              <Button variant="ghost" size="sm" className="text-ink-faint text-xs" onClick={clearAndNew}>
+              <Button variant="ghost" size="sm" className="text-xs" onClick={clearAndNew}>
                 Clear
               </Button>
             )}

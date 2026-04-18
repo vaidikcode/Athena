@@ -1,179 +1,132 @@
 @import "tailwindcss";
 @config "../../tailwind.config.mjs";
 
-/* ── Design tokens: White + Green ──────────────────────────────────────── */
+/* ── Neo-brutalist design tokens ───────────────────────────────────────────── */
 :root {
-  /* Brand */
-  --green-50:  #f0fdf4;
-  --green-100: #dcfce7;
-  --green-200: #bbf7d0;
-  --green-600: #16a34a;
-  --green-700: #15803d;
-  --green-900: #14532d;
+  /* Brand palette */
+  --nb-blue:   #4D96FF;
+  --nb-yellow: #FFD93D;
+  --nb-coral:  #FF6B6B;
+  --nb-green:  #6BCB77;
+  --nb-purple: #A29BFE;
+  --nb-orange: #FF9F43;
+  --nb-black:  #000000;
+  --nb-white:  #FFFFFF;
+  --nb-cream:  #FFFBF0;
 
-  /* Semantic surface tokens (old names kept so existing classes still work) */
-  --athens-blue:      #16a34a;   /* brand green */
-  --athens-stone:     #e2e8f0;   /* border */
-  --athens-highlight: #f0fdf4;   /* green-50 tint background */
+  /* Semantic aliases kept so existing Tailwind classes still resolve */
+  --athens-blue:      #4D96FF;
+  --athens-stone:     #000000;
+  --athens-highlight: #FFF9E6;
 
-  --ink:         #0f172a;
-  --ink-muted:   #475569;
-  --ink-subtle:  #64748b;
-  --ink-faint:   #94a3b8;
+  --ink:         #000000;
+  --ink-muted:   #333333;
+  --ink-subtle:  #555555;
+  --ink-faint:   #888888;
 
-  --surface-base:    #f8fafc;
-  --surface-raised:  #ffffff;
-  --surface-overlay: #f0fdf4;
-  --surface-border:  #e2e8f0;
+  --surface-base:   #FFFBF0;   /* cream */
+  --surface-raised: #FFFFFF;
+  --surface-overlay:#FFF9E6;
+  --surface-border: #000000;   /* hard black border by default */
 
-  --agent:     #16a34a;
-  --agent-dim: #15803d;
+  --agent:     #4D96FF;
+  --agent-dim: #2a7ae8;
 
-  --status-success: #16a34a;
-  --status-warning: #d97706;
-  --status-error:   #dc2626;
-  --status-running: #16a34a;
+  --status-success: #6BCB77;
+  --status-warning: #FFD93D;
+  --status-error:   #FF6B6B;
+  --status-running: #4D96FF;
 
-  /* shadcn-compatible tokens */
-  --background:         0 0% 100%;
-  --foreground:         222 84% 5%;
-  --card:               0 0% 100%;
-  --card-foreground:    222 84% 5%;
-  --popover:            0 0% 100%;
-  --popover-foreground: 222 84% 5%;
-  --primary:            142 76% 36%;
-  --primary-foreground: 0 0% 100%;
-  --secondary:          142 71% 95%;
-  --secondary-foreground: 142 72% 20%;
-  --muted:              210 40% 96%;
-  --muted-foreground:   215 16% 47%;
-  --accent:             142 71% 95%;
-  --accent-foreground:  142 72% 20%;
-  --destructive:        0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --border:             214 32% 91%;
-  --input:              214 32% 91%;
-  --ring:               142 76% 36%;
-  --radius:             0.5rem;
+  /* Brand tokens used in new components */
+  --brand:     #4D96FF;
+  --brand-50:  #EEF5FF;
+  --brand-100: #D4E8FF;
+  --brand-600: #4D96FF;
+  --brand-700: #2a7ae8;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html {
-  font-size: 15px;
-}
+html { font-size: 15px; }
 
-html,
-body {
+html, body {
   height: 100%;
   margin: 0;
-  background: var(--surface-base);
-  color: var(--ink);
-  font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-weight: 400;
+  background: var(--nb-cream);
+  color: var(--nb-black);
+  font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography scale */
+/* ── Typography scale ─────────────────────────────────────────────────────── */
 .text-athens-display {
-  font-size: 2rem;
-  line-height: 2.25rem;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--ink);
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
-
 .text-athens-large {
   font-size: 2rem;
   line-height: 2.25rem;
-  font-weight: 700;
-  color: var(--ink);
+  font-weight: 800;
 }
-
 .text-athens-title {
   font-size: 1.125rem;
   line-height: 1.6rem;
-  font-weight: 600;
-  color: var(--ink);
+  font-weight: 700;
 }
-
 .text-athens-body {
   font-size: 0.9375rem;
   line-height: 1.55rem;
-  font-weight: 400;
-  color: var(--ink);
+  font-weight: 600;
 }
-
 .text-athens-small {
   font-size: 0.8125rem;
   line-height: 1.35rem;
-  font-weight: 500;
-  color: var(--ink);
+  font-weight: 600;
 }
+.text-athens-semibold { font-weight: 700; }
+.text-athens-bold     { font-weight: 800; }
 
-.text-athens-semibold { font-weight: 600; }
-.text-athens-bold     { font-weight: 700; }
-
-/* Strip the heavy bold override — let each component set its own weight */
-.font-thin,
-.font-extralight,
-.font-light,
-.font-normal,
-.font-medium,
-.font-semibold {
-  /* no override — use real weights */
-}
-
-/* Panel */
+/* ── Neo-brutalist panel ──────────────────────────────────────────────────── */
 .athens-highlight {
   margin: 0.75rem;
   padding: 1rem 1.25rem;
-  background: var(--surface-raised);
-  border: 1px solid var(--surface-border);
-  border-radius: 0.75rem;
+  background: var(--nb-white);
+  border: 3px solid var(--nb-black);
+  border-radius: 1rem;
+  box-shadow: 4px 4px 0px 0px #000;
 }
 
-/* Scrollbar */
+/* ── Card ─────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--nb-white);
+  border: 3px solid #000;
+  border-radius: 1rem;
+  box-shadow: 4px 4px 0px 0px #000;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 99px;
-}
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #aaa; }
 
-/* Mono */
+/* ── Mono ─────────────────────────────────────────────────────────────────── */
 .mono {
-  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
   font-size: 0.8125rem;
   line-height: 1.5;
+  font-weight: 600;
 }
 
-/* Status dots */
-.status-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
+/* ── Status dots ──────────────────────────────────────────────────────────── */
+.status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }
 .status-dot--success { background: var(--status-success); }
 .status-dot--warning { background: var(--status-warning); }
 .status-dot--error   { background: var(--status-error); }
-.status-dot--running {
-  background: var(--status-running);
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-/* Card */
-.card {
-  background: var(--surface-raised);
-  border: 1px solid var(--surface-border);
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-}
+.status-dot--running { background: var(--status-running); animation: pulse 1.5s ease-in-out infinite; }
 
 .agent-text { color: var(--agent); }
 
@@ -182,11 +135,40 @@ body {
   50%       { opacity: 0.35; }
 }
 
-/* Fade-in for widgets */
+/* ── Fade up ──────────────────────────────────────────────────────────────── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-up {
-  animation: fadeUp 0.25s ease-out both;
+.animate-fade-up { animation: fadeUp 0.2s ease-out both; }
+
+/* ── Pulse slow (avatar-ai) ──────────────────────────────────────────────── */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
 }
+.animate-pulse-slow { animation: pulse-slow 3s cubic-bezier(0.4,0,0.6,1) infinite; }
+
+/* ── Marquee (avatar-ai style) ───────────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 22s linear infinite; }
+
+/* ── Dot pattern ─────────────────────────────────────────────────────────── */
+.dot-pattern {
+  background-image: radial-gradient(circle, #000 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+.dot-pattern-white {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.35) 1.5px, transparent 1.5px);
+  background-size: 20px 20px;
+}
+
+/* ── Ring animation ──────────────────────────────────────────────────────── */
+@keyframes dash {
+  from { stroke-dashoffset: 565; }
+  to   { stroke-dashoffset: 0; }
+}
+.animate-ring { animation: dash 1.5s ease-out forwards; }

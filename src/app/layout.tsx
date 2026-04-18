@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito } from "next/font/google";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { SignInGate } from "@/components/auth/SignInGate";
 import { SetupGate } from "@/components/auth/SetupGate";
 import { Sidebar } from "@/components/layout/Sidebar";
 import "./globals.css";
 
-const inter = Inter({
+const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "600", "700", "800", "900"],
+  variable: "--font-nunito",
   display: "swap",
 });
 
@@ -19,14 +20,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body className={`min-h-screen bg-surface-base text-ink antialiased ${inter.className}`}>
+    <html lang="en" className={nunito.variable}>
+      <body className={`min-h-screen bg-nb-cream text-nb-black antialiased ${nunito.className}`}>
         <QueryProvider>
           <SignInGate>
             <SetupGate>
-              <div className="flex h-screen min-h-0 bg-surface-base">
+              <div className="flex h-screen min-h-0">
                 <Sidebar />
-                <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-surface-base">{children}</main>
+                <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-nb-cream">{children}</main>
               </div>
             </SetupGate>
           </SignInGate>

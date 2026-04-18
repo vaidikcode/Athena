@@ -13,14 +13,22 @@ import {
 import { MOCK_POINTS } from "@/lib/mock/data";
 import { cn } from "@/lib/utils";
 
+/* Each metric gets its own neobrutalist accent color */
 const POINT_META: Record<
   keyof typeof MOCK_POINTS,
-  { label: string; Icon: LucideIcon }
+  { label: string; Icon: LucideIcon; bg: string; iconColor: string }
 > = {
-  health:    { label: "Health",    Icon: Activity },
-  knowledge: { label: "Knowledge", Icon: ScrollText },
-  money:     { label: "Money",     Icon: CircleDollarSign },
-  work:      { label: "Work",      Icon: Briefcase },
+  health:    { label: "Health",    Icon: Activity,         bg: "bg-nb-coral",  iconColor: "text-white" },
+  knowledge: { label: "Knowledge", Icon: ScrollText,       bg: "bg-nb-purple", iconColor: "text-black" },
+  money:     { label: "Money",     Icon: CircleDollarSign, bg: "bg-nb-green",  iconColor: "text-black" },
+  work:      { label: "Work",      Icon: Briefcase,        bg: "bg-nb-blue",   iconColor: "text-white" },
+};
+
+const BAR_COLORS: Record<keyof typeof MOCK_POINTS, string> = {
+  health:    "#FF6B6B",
+  knowledge: "#A29BFE",
+  money:     "#6BCB77",
+  work:      "#4D96FF",
 };
 
 function streakMultiplier(streakWeeks: number): number {
@@ -58,31 +66,34 @@ function PointRow({
       <button
         type="button"
         onClick={() => onMetricClick(metricKey, data.value, data.max)}
-        className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-surface-base transition-colors"
+        className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-nb-yellow/20 transition-colors"
       >
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 border border-brand-200">
-          <Icon className="size-4 text-brand-600" aria-hidden />
+        <div className={cn("flex size-9 shrink-0 items-center justify-center rounded-xl border-[2px] border-black shadow-nb-sm", meta.bg)}>
+          <Icon className={cn("size-4", meta.iconColor)} aria-hidden />
         </div>
 
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline justify-between gap-2">
-            <span className="text-sm font-semibold text-ink">{meta.label}</span>
-            <span className="text-base font-bold text-ink tabular-nums">
+            <span className="text-sm font-black text-black">{meta.label}</span>
+            <span className="text-base font-black text-black tabular-nums">
               {boosted}
-              <span className="text-xs font-normal text-ink-faint">/100</span>
+              <span className="text-xs font-bold text-black/40">/100</span>
             </span>
           </div>
-          <div className="mt-1.5 h-1.5 w-full rounded-full bg-surface-border overflow-hidden">
-            <div className="h-full rounded-full bg-brand-600 transition-all" style={{ width: `${boosted}%` }} />
+          <div className="mt-1.5 h-2 w-full rounded-full bg-black/10 overflow-hidden border border-black/20">
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${boosted}%`, background: BAR_COLORS[metricKey] }}
+            />
           </div>
           <div className="mt-1 flex items-center gap-2">
-            <span className="text-[11px] text-ink-faint">{data.streakWeeks}w streak</span>
+            <span className="text-[11px] font-bold text-black/50">{data.streakWeeks}w streak</span>
             {mult > 1 && (
-              <span className="text-[11px] font-semibold text-brand-600 bg-brand-50 rounded px-1">
+              <span className="text-[11px] font-black text-black bg-nb-yellow border border-black rounded px-1">
                 {formatMult(mult)}
               </span>
             )}
-            <span className={cn("ml-auto flex items-center gap-0.5 text-[11px] font-medium", data.trend === "up" ? "text-brand-700" : "text-ink-faint")}>
+            <span className={cn("ml-auto flex items-center gap-0.5 text-[11px] font-black", data.trend === "up" ? "text-nb-green" : "text-nb-coral")}>
               {data.trend === "up" ? <TrendingUp className="size-3" /> : <TrendingDown className="size-3" />}
               {data.delta > 0 ? "+" : ""}{data.delta}
             </span>
@@ -95,15 +106,15 @@ function PointRow({
 
 export function PointsGrid({ onMetricClick }: { onMetricClick: (metric: string, value: number, max: number) => void }) {
   return (
-    <div className="rounded-xl border border-surface-border bg-white shadow-sm overflow-hidden">
-      <div className="flex items-center gap-2 px-5 py-3 border-b border-surface-border bg-surface-base">
-        <BarChart3 className="size-4 text-brand-600 shrink-0" />
-        <h3 className="text-sm font-semibold text-ink">Life scores</h3>
+    <div className="rounded-2xl border-[3px] border-black bg-white overflow-hidden shadow-nb">
+      <div className="flex items-center gap-2 px-5 py-3 border-b-[3px] border-black bg-nb-green">
+        <BarChart3 className="size-4 text-black shrink-0" />
+        <h3 className="text-sm font-black text-black">Life scores</h3>
       </div>
-      <p className="px-5 py-3 text-xs text-ink-subtle border-b border-surface-border">
+      <p className="px-5 py-2 text-xs font-bold text-black/50 border-b-[2px] border-black/20 bg-nb-cream">
         Streak multiplier: sustained weekly consistency raises your displayed score.
       </p>
-      <ul className="divide-y divide-surface-border">
+      <ul className="divide-y-[2px] divide-black/10">
         {(Object.keys(POINT_META) as MetricKey[]).map((k) => (
           <PointRow key={k} metricKey={k} onMetricClick={onMetricClick} />
         ))}

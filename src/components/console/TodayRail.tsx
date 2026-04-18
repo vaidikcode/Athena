@@ -73,18 +73,19 @@ export function TodayRail() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-3.5 py-3 border-b border-surface-border">
+      {/* Header */}
+      <div className="flex items-center justify-between px-3.5 py-3 border-b-[3px] border-black bg-nb-green/20">
         <div className="flex items-center gap-2">
-          <CalendarDays className="size-4 text-brand-600 shrink-0" />
-          <span className="text-xs font-semibold text-ink">Today</span>
-          <span className="text-xs text-ink-faint">·</span>
-          <span className="text-xs text-ink-faint">
+          <CalendarDays className="size-4 text-black shrink-0" />
+          <span className="text-xs font-black text-black">Today</span>
+          <span className="text-xs text-black/40">·</span>
+          <span className="text-xs font-bold text-black/60">
             {new Date().toLocaleDateString([], { month: "short", day: "numeric" })}
           </span>
         </div>
         <Link
           href="/calendar"
-          className="flex items-center gap-1 text-[11px] text-ink-faint hover:text-brand-600 transition-colors"
+          className="flex items-center gap-1 text-[11px] font-bold text-black/50 hover:text-nb-blue transition-colors"
         >
           <ExternalLink className="size-3" />
           Full
@@ -93,9 +94,9 @@ export function TodayRail() {
 
       <div className="flex-1 overflow-y-auto p-2.5 space-y-3">
         {conflicts.length > 0 && (
-          <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2">
-            <AlertTriangle className="size-3.5 text-red-500 shrink-0" />
-            <p className="text-xs font-semibold text-red-700">
+          <div className="flex items-center gap-2 rounded-xl border-[3px] border-black bg-nb-coral px-3 py-2 shadow-nb-sm">
+            <AlertTriangle className="size-3.5 text-white shrink-0" />
+            <p className="text-xs font-black text-white">
               {conflicts.length} conflict{conflicts.length > 1 ? "s" : ""}
             </p>
           </div>

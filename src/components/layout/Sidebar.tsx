@@ -40,24 +40,22 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex h-screen w-52 shrink-0 flex-col bg-white border-r border-surface-border">
+    <aside className="flex h-screen w-52 shrink-0 flex-col bg-nb-yellow border-r-[3px] border-black shadow-[4px_0px_0px_0px_rgba(0,0,0,0.15)]">
       {/* Logo */}
-      <div className="px-5 py-4">
+      <div className="px-4 py-4 border-b-[3px] border-black">
         <div className="flex items-center gap-2.5">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-brand-600 shadow-sm">
-            <Zap className="size-4 text-white" />
+          <div className="flex size-9 items-center justify-center rounded-xl bg-black shadow-nb-sm">
+            <Zap className="size-5 text-nb-yellow" />
           </div>
           <div>
-            <p className="text-sm font-bold text-ink leading-none">Athena</p>
-            <p className="text-[11px] text-ink-faint leading-none mt-0.5">Schedule OS</p>
+            <p className="text-sm font-black text-black leading-none">Athena</p>
+            <p className="text-[11px] font-bold text-black/60 leading-none mt-0.5">Schedule OS</p>
           </div>
         </div>
       </div>
 
-      <div className="mx-3 h-px bg-surface-border" />
-
       {/* Nav */}
-      <nav className="flex flex-1 flex-col gap-0.5 p-2 pt-2.5">
+      <nav className="flex flex-1 flex-col gap-1 p-2 pt-3">
         {NAV.map(({ href, label, icon: Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href);
           return (
@@ -65,31 +63,25 @@ export function Sidebar() {
               key={href}
               href={href}
               className={cn(
-                "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all",
+                "flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-bold transition-all border-[3px]",
                 active
-                  ? "bg-brand-50 text-brand-700 font-semibold"
-                  : "text-ink-muted hover:bg-surface-base hover:text-ink"
+                  ? "bg-white border-black shadow-nb-sm text-black"
+                  : "border-transparent text-black/70 hover:bg-white/60 hover:border-black hover:text-black"
               )}
             >
-              <Icon
-                className={cn("size-4 shrink-0", active ? "text-brand-600" : "opacity-65")}
-                aria-hidden
-              />
+              <Icon className="size-4 shrink-0" aria-hidden />
               {label}
-              {active && (
-                <span className="ml-auto size-1.5 rounded-full bg-brand-600" />
-              )}
             </Link>
           );
         })}
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-surface-border p-2">
+      <div className="border-t-[3px] border-black p-2">
         <button
           type="button"
           onClick={() => setJobsOpen((v) => !v)}
-          className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium text-ink-faint hover:bg-surface-base hover:text-ink-muted transition-colors"
+          className="flex w-full items-center justify-between rounded-xl px-2.5 py-1.5 text-xs font-bold text-black/60 hover:bg-white/60 hover:text-black transition-colors border-[2px] border-transparent hover:border-black"
         >
           <span>Background jobs</span>
           {jobsOpen ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
@@ -112,7 +104,7 @@ export function Sidebar() {
             ))}
           </div>
         )}
-        <p className="px-2.5 py-1.5 text-[10px] text-ink-faint">
+        <p className="px-2.5 py-1 text-[10px] font-bold text-black/40 bg-[#fff4c2] rounded-lg mt-1">
           {process.env.NEXT_PUBLIC_LLM_PROVIDER ?? "gemini"}
         </p>
       </div>

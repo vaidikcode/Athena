@@ -30,10 +30,10 @@ const WEEK_SCORES = [72, 68, 85, 55, 78, 63, 68];
 const WEEK_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function barTone(score: number, isToday: boolean): string {
-  if (isToday) return "bg-athens-blue ring-2 ring-athens-stone";
-  if (score >= 70) return "bg-athens-blue";
-  if (score >= 50) return "bg-athens-blue/55";
-  return "bg-athens-stone";
+  if (isToday) return "bg-nb-blue ring-2 ring-athens-stone";
+  if (score >= 70) return "bg-nb-blue";
+  if (score >= 50) return "bg-nb-blue/55";
+  return "bg-black/20";
 }
 
 export default function FeedbackPage() {
@@ -44,12 +44,12 @@ export default function FeedbackPage() {
     <div className="flex h-full min-h-0 overflow-hidden">
       <div className="flex-1 space-y-6 overflow-y-auto px-6 py-6">
         <div>
-          <h1 className="text-athens-display text-athens-blue">Daily Feedback</h1>
-          <p className="text-athens-small mt-0.5 font-light text-athens-blue/70">Yesterday · {DAILY_FEEDBACK.date}</p>
+          <h1 className="text-2xl font-black text-nb-blue">Daily Feedback</h1>
+          <p className="text-xs font-bold mt-0.5 font-light text-nb-blue/70">Yesterday · {DAILY_FEEDBACK.date}</p>
         </div>
 
         <div className="m-2 p-2">
-          <div className="border border-athens-stone bg-white p-6 shadow-sm">
+          <div className="border border-black bg-white p-6 shadow-sm">
             <div className="flex items-center gap-4">
               <div className="relative">
                 <svg width="80" height="80" className="-rotate-90">
@@ -66,23 +66,23 @@ export default function FeedbackPage() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-xl font-bold text-athens-blue">{DAILY_FEEDBACK.overallScore}</span>
+                  <span className="text-xl font-bold text-nb-blue">{DAILY_FEEDBACK.overallScore}</span>
                 </div>
               </div>
               <div className="flex-1">
                 <div className="mb-2 flex items-center gap-2">
-                  <Star className="size-4 fill-athens-blue/25 text-athens-blue" aria-hidden />
-                  <span className="text-sm font-semibold text-athens-blue">Overall day score</span>
+                  <Star className="size-4 fill-athens-blue/25 text-nb-blue" aria-hidden />
+                  <span className="text-sm font-semibold text-nb-blue">Overall day score</span>
                 </div>
-                <p className="text-sm font-light leading-relaxed text-athens-blue/85">{DAILY_FEEDBACK.summary}</p>
+                <p className="text-sm font-light leading-relaxed text-nb-blue/85">{DAILY_FEEDBACK.summary}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="m-2 p-2">
-          <div className="border border-athens-stone bg-white p-5 shadow-sm">
-            <h3 className="mb-4 text-sm font-semibold text-athens-blue">This week</h3>
+          <div className="border border-black bg-white p-5 shadow-sm">
+            <h3 className="mb-4 text-sm font-semibold text-nb-blue">This week</h3>
             <div className="flex h-20 items-end gap-2">
               {WEEK_SCORES.map((s, i) => (
                 <div key={i} className="flex flex-1 flex-col items-center gap-1">
@@ -90,7 +90,7 @@ export default function FeedbackPage() {
                     className={cn("w-full rounded-t-sm", barTone(s, i === dayIdx))}
                     style={{ height: `${s}%` }}
                   />
-                  <span className="text-[10px] font-light text-athens-blue/55">{WEEK_DAYS[i]}</span>
+                  <span className="text-[10px] font-light text-nb-blue/55">{WEEK_DAYS[i]}</span>
                 </div>
               ))}
             </div>
@@ -99,14 +99,14 @@ export default function FeedbackPage() {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="m-2 p-2">
-            <div className="border border-athens-stone bg-athens-highlight p-4">
-              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-athens-blue">
+            <div className="border border-black bg-nb-cream p-4">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-nb-blue">
                 <CheckCircle2 className="size-4" aria-hidden /> Wins
               </h3>
               <ul className="space-y-2">
                 {DAILY_FEEDBACK.wins.map((w, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs font-light text-athens-blue">
-                    <div className="mt-0.5 flex size-3.5 shrink-0 items-center justify-center rounded-full border border-athens-stone bg-athens-blue">
+                  <li key={i} className="flex items-start gap-2 text-xs font-light text-nb-blue">
+                    <div className="mt-0.5 flex size-3.5 shrink-0 items-center justify-center rounded-full border border-black bg-nb-blue">
                       <div className="size-1 rounded-full bg-white" />
                     </div>
                     {w}
@@ -117,15 +117,15 @@ export default function FeedbackPage() {
           </div>
 
           <div className="m-2 p-2">
-            <div className="border border-athens-stone bg-athens-highlight p-4">
-              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-athens-blue">
+            <div className="border border-black bg-nb-cream p-4">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-nb-blue">
                 <XCircle className="size-4" aria-hidden /> Misses
               </h3>
               <ul className="space-y-2">
                 {DAILY_FEEDBACK.misses.map((m, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs font-light text-athens-blue/85">
-                    <div className="mt-0.5 flex size-3.5 shrink-0 items-center justify-center rounded-full border border-athens-stone bg-athens-stone">
-                      <div className="size-1 rounded-full bg-athens-blue" />
+                  <li key={i} className="flex items-start gap-2 text-xs font-light text-nb-blue/85">
+                    <div className="mt-0.5 flex size-3.5 shrink-0 items-center justify-center rounded-full border border-black bg-black/20">
+                      <div className="size-1 rounded-full bg-nb-blue" />
                     </div>
                     {m}
                   </li>
@@ -136,8 +136,8 @@ export default function FeedbackPage() {
         </div>
 
         <div>
-          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-athens-blue">
-            <AlertCircle className="size-4 text-athens-blue/70" aria-hidden /> Athena recommends
+          <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-nb-blue">
+            <AlertCircle className="size-4 text-nb-blue/70" aria-hidden /> Athena recommends
           </h3>
           <div className="space-y-3">
             {DAILY_FEEDBACK.suggestions.map((s, i) => {
@@ -145,12 +145,12 @@ export default function FeedbackPage() {
               return (
                 <div
                   key={i}
-                  className="m-2 flex items-start gap-3 border border-athens-stone bg-white p-2 shadow-sm"
+                  className="m-2 flex items-start gap-3 border border-black bg-white p-2 shadow-sm"
                 >
-                  <div className="m-1 flex shrink-0 items-center justify-center border border-athens-stone bg-athens-highlight p-2 text-athens-blue">
+                  <div className="m-1 flex shrink-0 items-center justify-center border border-black bg-nb-cream p-2 text-nb-blue">
                     <SIcon className="size-5" aria-hidden />
                   </div>
-                  <p className="text-sm font-light leading-relaxed text-athens-blue/90">{s.text}</p>
+                  <p className="text-sm font-light leading-relaxed text-nb-blue/90">{s.text}</p>
                 </div>
               );
             })}
@@ -158,30 +158,30 @@ export default function FeedbackPage() {
         </div>
 
         <div>
-          <h3 className="mb-3 text-sm font-semibold text-athens-blue">Metric snapshot</h3>
+          <h3 className="mb-3 text-sm font-semibold text-nb-blue">Metric snapshot</h3>
           <div className="grid grid-cols-2 gap-3">
             {Object.entries(MOCK_POINTS).map(([k, v]) => (
               <div
                 key={k}
-                className="m-2 flex items-center gap-3 border border-athens-stone bg-white p-2 shadow-sm"
+                className="m-2 flex items-center gap-3 border border-black bg-white p-2 shadow-sm"
               >
                 <div className="flex-1 p-2">
-                  <div className="text-xs font-semibold capitalize text-athens-blue">{k}</div>
-                  <div className="text-sm font-bold text-athens-blue">
+                  <div className="text-xs font-semibold capitalize text-nb-blue">{k}</div>
+                  <div className="text-sm font-bold text-nb-blue">
                     {v.value}/{v.max}
                   </div>
                 </div>
                 {v.trend === "up" ? (
-                  <TrendingUp className="size-4 text-athens-blue" />
+                  <TrendingUp className="size-4 text-nb-blue" />
                 ) : (
-                  <TrendingDown className="size-4 text-athens-blue/50" />
+                  <TrendingDown className="size-4 text-nb-blue/50" />
                 )}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="m-2 border border-athens-stone bg-athens-highlight p-4 text-athens-small font-light text-athens-blue/75">
+        <div className="m-2 border border-black bg-nb-cream p-4 text-xs font-bold font-light text-nb-blue/75">
           Streak context: {MOCK_METRICS.streakDays} day run · relationships sampled: {MOCK_RELATIONSHIPS.length} ties.
         </div>
         <div className="h-8" />

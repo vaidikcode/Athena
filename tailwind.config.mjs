@@ -9,60 +9,88 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
-        mono: ["JetBrains Mono", "Fira Code", "Consolas", "monospace"],
+        sans:   ["Nunito", "system-ui", "-apple-system", "sans-serif"],
+        nunito: ["Nunito", "sans-serif"],
+        mono:   ["JetBrains Mono", "Fira Code", "Consolas", "monospace"],
       },
       colors: {
-        /* Remap athens-* tokens to green palette — all class names kept so
-           no component files need touching */
-        athens: {
-          blue:      "#16a34a",   /* green-600 */
-          stone:     "#e2e8f0",   /* slate-200 */
-          highlight: "#f0fdf4",   /* green-50  */
+        /* Neo-brutalist palette (avatar-ai) */
+        nb: {
+          blue:   "#4D96FF",
+          yellow: "#FFD93D",
+          coral:  "#FF6B6B",
+          green:  "#6BCB77",
+          purple: "#A29BFE",
+          orange: "#FF9F43",
+          cream:  "#FFFBF0",
+          black:  "#000000",
+          white:  "#FFFFFF",
         },
 
-        /* New explicit palette for new components */
+        /* Legacy aliases so all existing athens-* classes still work */
+        athens: {
+          blue:      "#4D96FF",
+          stone:     "#000000",
+          highlight: "#FFF9E6",
+        },
+
         brand: {
-          DEFAULT: "#16a34a",
-          50:  "#f0fdf4",
-          100: "#dcfce7",
-          200: "#bbf7d0",
-          600: "#16a34a",
-          700: "#15803d",
-          900: "#14532d",
+          DEFAULT: "#4D96FF",
+          50:  "#EEF5FF",
+          100: "#D4E8FF",
+          200: "#A9D0FF",
+          400: "#80B8FF",
+          500: "#4D96FF",
+          600: "#4D96FF",
+          700: "#2a7ae8",
+          800: "#1a5fc4",
+          900: "#0d3d8a",
         },
 
         ink: {
-          DEFAULT: "#0f172a",
-          muted:  "#475569",
-          subtle: "#64748b",
-          faint:  "#94a3b8",
+          DEFAULT: "#000000",
+          muted:   "#333333",
+          subtle:  "#555555",
+          faint:   "#888888",
         },
 
         surface: {
-          base:    "#f8fafc",
-          raised:  "#ffffff",
-          overlay: "#f0fdf4",
-          border:  "#e2e8f0",
+          base:    "#FFFBF0",
+          raised:  "#FFFFFF",
+          overlay: "#FFF9E6",
+          border:  "#000000",
         },
 
         agent: {
-          DEFAULT: "#16a34a",
-          dim:     "#15803d",
+          DEFAULT: "#4D96FF",
+          dim:     "#2a7ae8",
         },
 
         status: {
-          success: "#16a34a",
-          warning: "#d97706",
-          error:   "#dc2626",
-          running: "#16a34a",
+          success: "#6BCB77",
+          warning: "#FFD93D",
+          error:   "#FF6B6B",
+          running: "#4D96FF",
         },
       },
       borderColor: {
-        DEFAULT: "#e2e8f0",
+        DEFAULT: "#000000",
       },
-      borderRadius: {
-        DEFAULT: "0.5rem",
+      boxShadow: {
+        "nb-sm": "2px 2px 0px 0px #000",
+        "nb":    "4px 4px 0px 0px #000",
+        "nb-md": "6px 6px 0px 0px #000",
+        "nb-lg": "8px 8px 0px 0px #000",
+        "nb-xl": "12px 12px 0px 0px #000",
+      },
+      animation: {
+        "pulse-slow": "pulse-slow 3s cubic-bezier(0.4,0,0.6,1) infinite",
+      },
+      keyframes: {
+        "pulse-slow": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
       },
     },
   },
