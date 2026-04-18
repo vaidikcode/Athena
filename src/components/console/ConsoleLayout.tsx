@@ -1,6 +1,7 @@
 "use client";
 
-import { Flame, Zap } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Flame } from "lucide-react";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { RulesRail } from "./RulesRail";
 import { Thread } from "./Thread";
@@ -14,6 +15,13 @@ export function ConsoleLayout() {
     day: "numeric",
   });
 
+  // Shared `send` function — Thread provides it; sidebar consumes it
+  const [sendFn, setSendFn] = useState<((text: string) => void) | null>(null);
+
+  const handleSendReady = useCallback((fn: (text: string) => void) => {
+    setSendFn(() => fn);
+  }, []);
+
   return (
     <QueryProvider>
       <div className="flex h-full min-h-0 flex-col bg-surface-base">
@@ -25,20 +33,22 @@ export function ConsoleLayout() {
           </div>
           <div className="flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3 py-1">
             <Flame className="size-3.5 text-brand-600" />
-            <span className="text-xs font-semibold text-brand-700">{MOCK_METRICS.streakDays} day streak</span>
+            <span className="text-xs font-semibold text-brand-700">
+              {MOCK_METRICS.streakDays} day streak
+            </span>
           </div>
         </div>
 
         {/* 3-column body */}
         <div className="flex min-h-0 flex-1 overflow-hidden">
-          {/* Left: Rules */}
+          {/* Left: Actions + Sources + Rules */}
           <div className="w-56 shrink-0 border-r border-surface-border bg-white flex flex-col overflow-hidden">
-            <RulesRail />
+            <RulesRail onSend={sendFn ?? undefined} />
           </div>
 
           {/* Center: Thread */}
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden bg-surface-base">
-            <Thread autoStart />
+            <Thread autoStart onSendReady={handleSendReady} />
           </div>
 
           {/* Right: Today */}

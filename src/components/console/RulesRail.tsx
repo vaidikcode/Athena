@@ -4,8 +4,29 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Plus, ShieldCheck, ToggleLeft, ToggleRight, Pencil, Check, X } from "lucide-react";
+import {
+  Plus,
+  ShieldCheck,
+  ToggleLeft,
+  ToggleRight,
+  Pencil,
+  Check,
+  X,
+  TrendingUp,
+  CalendarDays,
+  AlertTriangle,
+  BarChart3,
+  Search,
+  RefreshCw,
+  FileText,
+  MessageSquare,
+  Globe,
+  ChevronDown,
+  ChevronUp,
+  Zap,
+} from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { MOCK_DATA_SOURCES } from "@/lib/mock/data";
 
 interface Rule {
   id: string;
@@ -23,21 +44,93 @@ async function fetchRules(): Promise<Rule[]> {
   return res.json();
 }
 
+/* ── Quick-action chips ─────────────────────────────────────────────────── */
+const QUICK: Array<{
+  icon: React.ElementType;
+  label: string;
+  prompt: string;
+  color: string;
+}> = [
+  {
+    icon: TrendingUp,
+    label: "Find bottlenecks",
+    prompt:
+      "Analyse today's schedule: find bottlenecks, rule violations, and conflicts. Use render_day_timeline and find_conflicts widgets.",
+    color: "text-brand-600",
+  },
+  {
+    icon: CalendarDays,
+    label: "Today's timeline",
+    prompt: "Show me today's full timeline using render_day_timeline.",
+    color: "text-sky-600",
+  },
+  {
+    icon: AlertTriangle,
+    label: "Spot conflicts",
+    prompt: "Find all scheduling conflicts today and show them as conflict cards.",
+    color: "text-amber-600",
+  },
+  {
+    icon: BarChart3,
+    label: "Workload check",
+    prompt: "Show my workload summary for today using render_load.",
+    color: "text-violet-600",
+  },
+  {
+    icon: ShieldCheck,
+    label: "Audit rules",
+    prompt: "List my active rules and check if today's calendar violates any of them.",
+    color: "text-emerald-600",
+  },
+  {
+    icon: Search,
+    label: "Find free slot",
+    prompt:
+      "Find free slots in my schedule today where I could add a 1-hour deep work session.",
+    color: "text-rose-600",
+  },
+  {
+    icon: RefreshCw,
+    label: "Sync all signals",
+    prompt:
+      "Fetch signals from all connected sources: emails, Slack, and health stats.",
+    color: "text-orange-500",
+  },
+  {
+    icon: Zap,
+    label: "Full briefing",
+    prompt:
+      "Give me a full briefing: today's timeline, bottlenecks, conflicts, rule violations, and top 3 actionable fixes.",
+    color: "text-brand-700",
+  },
+];
+
+const SRC_ICON: Record<string, React.ElementType> = {
+  notion: FileText,
+  slack: MessageSquare,
+  "google-docs": FileText,
+  browser: Globe,
+};
+
+/* ── Priority indicator ─────────────────────────────────────────────────── */
 function PriorityBar({ priority }: { priority: number }) {
-  const segments = [1, 2, 3];
   const filled = priority >= 8 ? 3 : priority >= 5 ? 2 : 1;
   return (
     <span className="flex gap-0.5 shrink-0 items-center" title={`Priority ${priority}`}>
-      {segments.map((s) => (
+      {[1, 2, 3].map((s) => (
         <span
           key={s}
-          className={cn("inline-block h-1.5 w-3 rounded-sm", s <= filled ? "bg-brand-600" : "bg-surface-border")}
+          className={cn(
+            "inline-block h-1.5 w-2.5 rounded-sm",
+            s <= filled ? "bg-brand-600" : "bg-surface-border"
+          )}
         />
       ))}
     </span>
   );
 }
 
+/* ── Rule row ───────────────────────────────────────────────────────────── */
 interface RuleRowProps {
   rule: Rule;
   onToggle: (id: string, enabled: boolean) => void;
@@ -49,61 +142,88 @@ function RuleRow({ rule, onToggle, onSave }: RuleRowProps) {
   const [title, setTitle] = useState(rule.title);
   const [body, setBody] = useState(rule.body);
 
-  const save = () => { onSave(rule.id, { title, body }); setEditing(false); };
-  const cancel = () => { setTitle(rule.title); setBody(rule.body); setEditing(false); };
+  const save = () => {
+    onSave(rule.id, { title, body });
+    setEditing(false);
+  };
+  const cancel = () => {
+    setTitle(rule.title);
+    setBody(rule.body);
+    setEditing(false);
+  };
 
   return (
     <div
       className={cn(
-        "rounded-lg border p-2.5 transition-all",
+        "rounded-lg border p-2 transition-all",
         rule.enabled
           ? "border-surface-border bg-white hover:border-brand-200"
           : "border-surface-border/50 bg-surface-base opacity-50"
       )}
     >
       {editing ? (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-md border border-surface-border bg-surface-base px-2 py-1 text-xs text-ink focus:outline-none focus:ring-1 focus:ring-brand-600/30"
+            className="w-full rounded border border-surface-border bg-surface-base px-2 py-1 text-[11px] text-ink focus:outline-none focus:ring-1 focus:ring-brand-600/30"
           />
           <Textarea
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            className="min-h-[52px] resize-y text-xs"
+            className="min-h-[44px] resize-y text-[11px]"
           />
           <div className="flex gap-1">
-            <Button size="sm" className="h-6 rounded-md px-2 text-[11px]" onClick={save}>
-              <Check className="size-3" />
+            <Button size="sm" className="h-5 rounded px-2 text-[10px]" onClick={save}>
+              <Check className="size-2.5" />
             </Button>
-            <Button size="sm" variant="ghost" className="h-6 rounded-md px-2 text-[11px]" onClick={cancel}>
-              <X className="size-3" />
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-5 rounded px-2 text-[10px]"
+              onClick={cancel}
+            >
+              <X className="size-2.5" />
             </Button>
           </div>
         </div>
       ) : (
-        <div className="flex items-start gap-2">
+        <div className="flex items-start gap-1.5">
           <PriorityBar priority={rule.priority} />
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold text-ink leading-tight truncate">{rule.title}</p>
-            <p className="text-[11px] text-ink-subtle leading-snug mt-0.5 line-clamp-2">{rule.body}</p>
+            <p className="text-[11px] font-semibold text-ink leading-tight truncate">
+              {rule.title}
+            </p>
+            <p className="text-[10px] text-ink-subtle leading-snug mt-0.5 line-clamp-2">
+              {rule.body}
+            </p>
             {rule.source === "agent" && (
-              <span className="mt-1 inline-block text-[10px] font-medium text-brand-600 bg-brand-50 rounded px-1">
+              <span className="mt-1 inline-block text-[9px] font-semibold text-brand-600 bg-brand-50 rounded px-1">
                 AI
               </span>
             )}
           </div>
-          <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button type="button" className="text-ink-faint hover:text-ink p-0.5 rounded" onClick={() => setEditing(true)}>
-              <Pencil className="size-3" />
+          <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button
+              type="button"
+              className="text-ink-faint hover:text-ink p-0.5 rounded"
+              onClick={() => setEditing(true)}
+            >
+              <Pencil className="size-2.5" />
             </button>
             <button
               type="button"
-              className={cn("p-0.5 rounded transition-colors", rule.enabled ? "text-brand-600" : "text-ink-faint hover:text-ink")}
+              className={cn(
+                "p-0.5 rounded transition-colors",
+                rule.enabled ? "text-brand-600" : "text-ink-faint hover:text-ink"
+              )}
               onClick={() => onToggle(rule.id, !rule.enabled)}
             >
-              {rule.enabled ? <ToggleRight className="size-4" /> : <ToggleLeft className="size-4" />}
+              {rule.enabled ? (
+                <ToggleRight className="size-3.5" />
+              ) : (
+                <ToggleLeft className="size-3.5" />
+              )}
             </button>
           </div>
         </div>
@@ -112,13 +232,55 @@ function RuleRow({ rule, onToggle, onSave }: RuleRowProps) {
   );
 }
 
-export function RulesRail() {
+/* ── Section header ─────────────────────────────────────────────────────── */
+function SectionHeader({
+  label,
+  open,
+  onToggle,
+  right,
+}: {
+  label: string;
+  open: boolean;
+  onToggle: () => void;
+  right?: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="flex w-full items-center justify-between px-3 py-2 border-b border-surface-border bg-surface-base hover:bg-surface-base/80 transition-colors"
+    >
+      <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
+        {label}
+      </span>
+      <div className="flex items-center gap-1.5">
+        {right}
+        {open ? (
+          <ChevronUp className="size-3 text-ink-faint" />
+        ) : (
+          <ChevronDown className="size-3 text-ink-faint" />
+        )}
+      </div>
+    </button>
+  );
+}
+
+/* ── Main export ────────────────────────────────────────────────────────── */
+export function RulesRail({
+  onSend,
+}: {
+  onSend?: (text: string) => void;
+}) {
   const queryClient = useQueryClient();
   const { data: rules = [], isLoading } = useQuery({
     queryKey: ["rules"],
     queryFn: fetchRules,
     staleTime: 30_000,
   });
+
+  const [actionsOpen, setActionsOpen] = useState(true);
+  const [sourcesOpen, setSourcesOpen] = useState(true);
+  const [rulesOpen, setRulesOpen] = useState(true);
 
   const [adding, setAdding] = useState(false);
   const [newTitle, setNewTitle] = useState("");
@@ -149,7 +311,9 @@ export function RulesRail() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle.trim(), body: newBody.trim(), source: "user" }),
     });
-    setNewTitle(""); setNewBody(""); setAdding(false);
+    setNewTitle("");
+    setNewBody("");
+    setAdding(false);
     void queryClient.invalidateQueries({ queryKey: ["rules"] });
   };
 
@@ -157,84 +321,176 @@ export function RulesRail() {
   const disabled = rules.filter((r) => !r.enabled);
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-3.5 py-3 border-b border-surface-border">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="size-4 text-brand-600 shrink-0" />
-          <span className="text-xs font-semibold text-ink">Rules</span>
-        </div>
-        <button
-          type="button"
-          onClick={() => setAdding((v) => !v)}
-          className="rounded-md p-1 text-ink-faint hover:text-brand-600 hover:bg-brand-50 transition-colors"
-          title="Add rule"
-        >
-          <Plus className="size-3.5" />
-        </button>
-      </div>
+    <div className="flex h-full flex-col overflow-y-auto text-[12px]">
 
-      <div className="flex-1 overflow-y-auto p-2.5 space-y-1.5">
-        {isLoading && <p className="text-xs text-ink-faint px-1 py-2">Loading…</p>}
-
-        {adding && (
-          <div className="rounded-lg border-2 border-dashed border-brand-200 bg-brand-50/50 p-2.5 space-y-2">
-            <input
-              autoFocus
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="Rule title…"
-              className="w-full rounded-md border border-surface-border bg-white px-2 py-1.5 text-xs text-ink focus:outline-none focus:ring-1 focus:ring-brand-600/30"
-            />
-            <Textarea
-              value={newBody}
-              onChange={(e) => setNewBody(e.target.value)}
-              placeholder="Describe the rule…"
-              className="min-h-[48px] resize-y text-xs"
-            />
-            <div className="flex gap-1.5">
-              <Button size="sm" className="h-6 rounded-md px-2.5 text-[11px]" onClick={() => void addRule()}>
-                Add
-              </Button>
-              <Button size="sm" variant="ghost" className="h-6 rounded-md px-2.5 text-[11px]" onClick={() => setAdding(false)}>
-                Cancel
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {enabled.length === 0 && !isLoading && !adding && (
-          <p className="text-xs text-ink-faint px-1 py-3 leading-relaxed">
-            No active rules. Add one or ask the agent to propose one.
-          </p>
-        )}
-
-        <div className="space-y-1.5">
-          {enabled.map((r) => (
-            <div key={r.id} className="group">
-              <RuleRow rule={r} onToggle={(id, en) => void toggle(id, en)} onSave={(id, p) => void save(id, p)} />
-            </div>
+      {/* ── Quick actions ── */}
+      <SectionHeader
+        label="Actions"
+        open={actionsOpen}
+        onToggle={() => setActionsOpen((v) => !v)}
+      />
+      {actionsOpen && (
+        <div className="p-2 space-y-1">
+          {QUICK.map(({ icon: Icon, label, prompt, color }) => (
+            <button
+              key={label}
+              type="button"
+              disabled={!onSend}
+              onClick={() => onSend?.(prompt)}
+              className="group flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left transition-colors hover:bg-surface-base disabled:opacity-40"
+            >
+              <Icon className={cn("size-3.5 shrink-0", color)} />
+              <span className="text-[11px] font-medium text-ink">{label}</span>
+            </button>
           ))}
         </div>
+      )}
 
-        {disabled.length > 0 && (
-          <>
-            <p className="text-[10px] font-semibold text-ink-faint uppercase tracking-wider px-1 pt-3">Disabled</p>
-            <div className="space-y-1.5">
-              {disabled.map((r) => (
-                <div key={r.id} className="group">
-                  <RuleRow rule={r} onToggle={(id, en) => void toggle(id, en)} onSave={(id, p) => void save(id, p)} />
+      {/* ── Connected sources ── */}
+      <SectionHeader
+        label="Sources"
+        open={sourcesOpen}
+        onToggle={() => setSourcesOpen((v) => !v)}
+      />
+      {sourcesOpen && (
+        <div className="p-2 space-y-1">
+          {MOCK_DATA_SOURCES.map((src) => {
+            const Icon = SRC_ICON[src.id] ?? FileText;
+            return (
+              <div key={src.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg">
+                <div
+                  className={cn(
+                    "flex size-5 shrink-0 items-center justify-center rounded text-[9px] font-bold",
+                    src.color
+                  )}
+                >
+                  {src.abbr}
                 </div>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+                <span className="flex-1 truncate text-[11px] font-medium text-ink">
+                  {src.label}
+                </span>
+                <span className="flex items-center gap-1 text-[10px] text-ink-faint shrink-0">
+                  <span className="size-1.5 rounded-full bg-brand-500 inline-block" />
+                  {src.eventCount}
+                </span>
+              </div>
+            );
+          })}
+          <button
+            type="button"
+            disabled={!onSend}
+            onClick={() =>
+              onSend?.(
+                "Fetch signals from all connected sources: emails, Slack, and health stats."
+              )
+            }
+            className="flex items-center gap-1.5 mt-1 px-2 text-[11px] font-medium text-brand-600 hover:text-brand-700 transition-colors disabled:opacity-40"
+          >
+            <RefreshCw className="size-3" />
+            Sync all
+          </button>
+        </div>
+      )}
 
-      <div className="px-3.5 py-2 border-t border-surface-border bg-surface-base/50">
-        <p className="text-[10px] text-ink-faint">
-          {enabled.length} active · {rules.length} total
-        </p>
-      </div>
+      {/* ── Rules ── */}
+      <SectionHeader
+        label={`Rules · ${enabled.length} active`}
+        open={rulesOpen}
+        onToggle={() => setRulesOpen((v) => !v)}
+        right={
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setRulesOpen(true);
+              setAdding((v) => !v);
+            }}
+            className="rounded p-0.5 text-ink-faint hover:text-brand-600 hover:bg-brand-50 transition-colors"
+            title="Add rule"
+          >
+            <Plus className="size-3" />
+          </button>
+        }
+      />
+      {rulesOpen && (
+        <div className="flex-1 p-2 space-y-1.5">
+          {isLoading && (
+            <p className="text-[10px] text-ink-faint px-1 py-2">Loading…</p>
+          )}
+
+          {adding && (
+            <div className="rounded-lg border-2 border-dashed border-brand-200 bg-brand-50/50 p-2 space-y-1.5">
+              <input
+                autoFocus
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                placeholder="Rule title…"
+                className="w-full rounded border border-surface-border bg-white px-2 py-1 text-[11px] text-ink focus:outline-none focus:ring-1 focus:ring-brand-600/30"
+              />
+              <Textarea
+                value={newBody}
+                onChange={(e) => setNewBody(e.target.value)}
+                placeholder="Describe the rule…"
+                className="min-h-[40px] resize-y text-[11px]"
+              />
+              <div className="flex gap-1">
+                <Button
+                  size="sm"
+                  className="h-5 rounded px-2 text-[10px]"
+                  onClick={() => void addRule()}
+                >
+                  Add
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-5 rounded px-2 text-[10px]"
+                  onClick={() => setAdding(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {enabled.length === 0 && !isLoading && !adding && (
+            <p className="text-[10px] text-ink-faint px-1 py-2 leading-relaxed">
+              No active rules. Add one or ask the agent.
+            </p>
+          )}
+
+          <div className="space-y-1">
+            {enabled.map((r) => (
+              <div key={r.id} className="group">
+                <RuleRow
+                  rule={r}
+                  onToggle={(id, en) => void toggle(id, en)}
+                  onSave={(id, p) => void save(id, p)}
+                />
+              </div>
+            ))}
+          </div>
+
+          {disabled.length > 0 && (
+            <>
+              <p className="text-[9px] font-semibold uppercase tracking-wider text-ink-faint px-1 pt-2">
+                Disabled
+              </p>
+              <div className="space-y-1">
+                {disabled.map((r) => (
+                  <div key={r.id} className="group">
+                    <RuleRow
+                      rule={r}
+                      onToggle={(id, en) => void toggle(id, en)}
+                      onSave={(id, p) => void save(id, p)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

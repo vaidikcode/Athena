@@ -15,7 +15,7 @@ import { DefaultChatTransport } from "ai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { Loader2, Send } from "lucide-react";
+import { Loader2, Send, Zap } from "lucide-react";
 import { dispatchWidget, type ToolPart } from "./widgetDispatch";
 import type { CalEvent } from "@/components/calendar/types";
 import { EventCard } from "./widgets/EventCard";
@@ -89,7 +89,14 @@ function FormattedText({ text }: { text: string }) {
 const AUTO_START =
   "Give me my briefing for today: surface bottlenecks in my schedule, check my active rules against the day, and show me the 3 most important moves — use tool calls to show the schedule.";
 
-export function Thread({ autoStart = false }: { autoStart?: boolean }) {
+export function Thread({
+  autoStart = false,
+  onSendReady,
+}: {
+  autoStart?: boolean;
+  /** Called once with a stable `send` function so the parent can wire sidebar actions */
+  onSendReady?: (send: (text: string) => void) => void;
+}) {
   const queryClient = useQueryClient();
   const [text, setText] = useState("");
   const [reschedulingEvent, setReschedulingEvent] = useState<CalEvent | null>(null);
@@ -127,6 +134,15 @@ export function Thread({ autoStart = false }: { autoStart?: boolean }) {
     },
     [busy, sendMessage]
   );
+
+  // Surface `send` to parent on first render so the sidebar can trigger prompts
+  const notifiedParent = useRef(false);
+  useEffect(() => {
+    if (!notifiedParent.current && onSendReady) {
+      notifiedParent.current = true;
+      onSendReady(send);
+    }
+  }, [send, onSendReady]);
 
   useEffect(() => {
     if (!autoStart || autoFired.current || messages.length > 0) return;
@@ -176,18 +192,24 @@ export function Thread({ autoStart = false }: { autoStart?: boolean }) {
       {/* Thread scroll area */}
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
         <div className="mx-auto flex max-w-2xl flex-col gap-3 pb-8">
+          {messages.length === 0 && busy && (
+            <div className="flex items-center justify-center gap-2 py-8 text-sm text-ink-subtle">
+              <Loader2 className="size-4 animate-spin text-brand-600" />
+              Preparing your briefing…
+            </div>
+          )}
+
           {messages.length === 0 && !busy && (
-            <div className="rounded-xl border border-dashed border-surface-border bg-white/80 p-8 text-center">
-              <p className="text-sm text-ink-faint">
-                {autoStart ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <Loader2 className="size-4 animate-spin text-brand-600" />
-                    Preparing your briefing…
-                  </span>
-                ) : (
-                  "Ask about today, a conflict, a rule, or anything on your schedule."
-                )}
-              </p>
+            <div className="flex flex-col items-center justify-center gap-3 py-16 text-center animate-fade-up">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-brand-600 shadow-sm">
+                <Zap className="size-5 text-white" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-ink">Console ready</p>
+                <p className="text-xs text-ink-faint mt-1">
+                  Pick an action from the sidebar or type below
+                </p>
+              </div>
             </div>
           )}
 
