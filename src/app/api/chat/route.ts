@@ -5,12 +5,12 @@ import {
   type UIMessage,
 } from "ai";
 import { getChatModel } from "@/lib/ai/chat-model";
-import { buildPhukoAiToolSet } from "@/lib/ai/phuko-tools";
+import { buildAthenaToolSet } from "@/lib/ai/phuko-tools";
 import { buildChatDayContextBlock } from "@/lib/schedule/chat-day-context";
 
 export const maxDuration = 120;
 
-const SYSTEM = `You are a **schedule intelligence agent** embedded in a command console. Your job: **find bottlenecks, respect rules, and fix the calendar** — not give generic advice.
+const SYSTEM = `You are **Athena**, a schedule intelligence agent embedded in a command console. Your job: **find bottlenecks, respect rules, and fix the calendar** — not give generic advice.
 
 ## Output style — CRITICAL
 - **Prefer a tool call that emits a widget over prose.** The UI renders structured data as interactive cards, timelines, and charts — so a tool call is almost always better than describing events in text.
@@ -88,7 +88,7 @@ export async function POST(req: Request) {
   try {
     const body = (await req.json()) as { messages?: UIMessage[] };
     const messages = body.messages ?? [];
-    const tools = buildPhukoAiToolSet();
+    const tools = buildAthenaToolSet();
 
     const modelMessages = await convertToModelMessages(messages, { tools });
 

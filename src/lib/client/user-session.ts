@@ -3,10 +3,10 @@
  * Password is never stored—only email and display name are persisted locally.
  */
 
-export const SESSION_STORAGE_KEY = "phuko_session_v1";
-const LEGACY_SESSION_KEY = "phuko_mock_google_v1";
+export const SESSION_STORAGE_KEY = "athena_session_v1";
+const LEGACY_SESSION_KEY = "athena_mock_google_v1";
 
-export const SESSION_CHANGED_EVENT = "phuko-session-changed";
+export const SESSION_CHANGED_EVENT = "athena-session-changed";
 
 export type SessionUser = {
   email: string;

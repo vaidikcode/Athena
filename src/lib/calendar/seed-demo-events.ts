@@ -6,7 +6,7 @@ import { calendarEvents, type EventType } from "@/lib/db/schema";
 import { calendarStore } from "@/lib/calendar/store";
 import { getDemoSourceEvents, type SourceId } from "@/lib/mock/data";
 
-const DEMO_EXTERNAL_PREFIX = "phuko-demo-";
+const DEMO_EXTERNAL_PREFIX = "athena-demo-";
 
 function localStart(dateYmd: string, hhmm: string): Date {
   const [y, mo, d] = dateYmd.split("-").map(Number);

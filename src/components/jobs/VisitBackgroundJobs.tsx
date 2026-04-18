@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const STORAGE_KEY = "phuko_visit_job_last_at";
+const STORAGE_KEY = "athena_visit_job_last_at";
 const CLIENT_MIN_MS = 30 * 60 * 1000;
 
 /**

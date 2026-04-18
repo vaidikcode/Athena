@@ -13,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Phuko — Schedule OS",
+  title: "Athena — Schedule OS",
   description: "Schedule intelligence, rules, and calendar leverage",
 };
 

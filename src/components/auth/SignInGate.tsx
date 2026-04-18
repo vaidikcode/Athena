@@ -38,7 +38,7 @@ export function SignInGate({ children }: { children: React.ReactNode }) {
               <div className="flex size-12 items-center justify-center rounded-xl bg-brand-600 shadow-sm mb-4">
                 <Zap className="size-6 text-white" aria-hidden />
               </div>
-              <h1 className="text-xl font-bold text-ink">Sign in to Phuko</h1>
+              <h1 className="text-xl font-bold text-ink">Sign in to Athena</h1>
               <p className="mt-1.5 text-sm text-ink-subtle">Schedule OS — intelligence for your day</p>
             </div>
 

@@ -48,7 +48,7 @@ export function Sidebar() {
             <Zap className="size-4 text-white" />
           </div>
           <div>
-            <p className="text-sm font-bold text-ink leading-none">Phuko</p>
+            <p className="text-sm font-bold text-ink leading-none">Athena</p>
             <p className="text-[11px] text-ink-faint leading-none mt-0.5">Schedule OS</p>
           </div>
         </div>

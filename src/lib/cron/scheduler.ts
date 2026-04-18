@@ -2,9 +2,9 @@ import "server-only";
 
 declare global {
   // eslint-disable-next-line no-var
-  var __phukoCronStarted: boolean | undefined;
+  var __athenaCronStarted: boolean | undefined;
   // eslint-disable-next-line no-var
-  var __phukoCronTimer: ReturnType<typeof setInterval> | undefined;
+  var __athenaCronTimer: ReturnType<typeof setInterval> | undefined;
 }
 
 /** How often we check wall-clock (was cron `0 * * * *` / `5 0 * * *`). */
@@ -26,8 +26,8 @@ let lastHourlyKey: string | null = null;
 let lastDailyKey: string | null = null;
 
 export function start() {
-  if (globalThis.__phukoCronStarted) return;
-  globalThis.__phukoCronStarted = true;
+  if (globalThis.__athenaCronStarted) return;
+  globalThis.__athenaCronStarted = true;
 
   if (process.env.CRON_ENABLED !== "true") {
     console.log("[cron] CRON_ENABLED != true — cron disabled");
@@ -69,7 +69,7 @@ export function start() {
   };
 
   tick();
-  globalThis.__phukoCronTimer = setInterval(tick, TICK_MS);
+  globalThis.__athenaCronTimer = setInterval(tick, TICK_MS);
   console.log(
     `[cron] Scheduled: hourly at :00, daily at 00:05 (tick every ${TICK_MS / 1000}s)`
   );

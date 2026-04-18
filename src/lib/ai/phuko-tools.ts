@@ -18,7 +18,7 @@ const HITL_TOOLS = new Set(["create_rule", "update_event", "delete_event"]);
  * Wrap LangChain StructuredTools as AI SDK tools so `streamText` + `useChat`
  * get first-class tool-call / tool-result streaming in the UI.
  */
-export function buildPhukoAiToolSet(): ToolSet {
+export function buildAthenaToolSet(): ToolSet {
   const registry = buildToolRegistry();
   const out: ToolSet = {};
 

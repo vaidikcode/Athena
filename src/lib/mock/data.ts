@@ -95,7 +95,7 @@ const DEMO_EVENT_ROWS: DemoEventRow[] = [
   { id: "bh3", source: "browser", title: "Workout planning session", dayOffset: 0, time: "07:00", duration: 20, tags: ["health"] },
 ];
 
-/** Demo events with `date` anchored to the user’s local calendar (same rows Phuko seeds into the DB). */
+/** Demo events with `date` anchored to the user’s local calendar (same rows Athena seeds into the DB). */
 export function getDemoSourceEvents(): Array<DemoEventRow & { date: string }> {
   const base = new Date();
   return DEMO_EVENT_ROWS.map((row) => {
