@@ -1,25 +1,68 @@
 @import "tailwindcss";
 @config "../../tailwind.config.mjs";
 
+/* ── Design tokens: White + Green ──────────────────────────────────────── */
 :root {
-  --ink: #0f172a;
-  --ink-muted: #475569;
-  --ink-subtle: #64748b;
-  --ink-faint: #94a3b8;
-  --surface-base: #f8fafc;
-  --surface-raised: #ffffff;
-  --surface-overlay: #f1f5f9;
-  --surface-border: #e2e8f0;
-  --agent: #059669;
-  --agent-dim: #047857;
+  /* Brand */
+  --green-50:  #f0fdf4;
+  --green-100: #dcfce7;
+  --green-200: #bbf7d0;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+  --green-900: #14532d;
+
+  /* Semantic surface tokens (old names kept so existing classes still work) */
+  --athens-blue:      #16a34a;   /* brand green */
+  --athens-stone:     #e2e8f0;   /* border */
+  --athens-highlight: #f0fdf4;   /* green-50 tint background */
+
+  --ink:         #0f172a;
+  --ink-muted:   #475569;
+  --ink-subtle:  #64748b;
+  --ink-faint:   #94a3b8;
+
+  --surface-base:    #f8fafc;
+  --surface-raised:  #ffffff;
+  --surface-overlay: #f0fdf4;
+  --surface-border:  #e2e8f0;
+
+  --agent:     #16a34a;
+  --agent-dim: #15803d;
+
   --status-success: #16a34a;
-  --status-warning: #ca8a04;
-  --status-error: #dc2626;
-  --status-running: #059669;
+  --status-warning: #d97706;
+  --status-error:   #dc2626;
+  --status-running: #16a34a;
+
+  /* shadcn-compatible tokens */
+  --background:         0 0% 100%;
+  --foreground:         222 84% 5%;
+  --card:               0 0% 100%;
+  --card-foreground:    222 84% 5%;
+  --popover:            0 0% 100%;
+  --popover-foreground: 222 84% 5%;
+  --primary:            142 76% 36%;
+  --primary-foreground: 0 0% 100%;
+  --secondary:          142 71% 95%;
+  --secondary-foreground: 142 72% 20%;
+  --muted:              210 40% 96%;
+  --muted-foreground:   215 16% 47%;
+  --accent:             142 71% 95%;
+  --accent-foreground:  142 72% 20%;
+  --destructive:        0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border:             214 32% 91%;
+  --input:              214 32% 91%;
+  --ring:               142 76% 36%;
+  --radius:             0.5rem;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  font-size: 15px;
 }
 
 html,
@@ -28,64 +71,122 @@ body {
   margin: 0;
   background: var(--surface-base);
   color: var(--ink);
+  font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Typography scale */
+.text-athens-display {
+  font-size: 2rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+
+.text-athens-large {
+  font-size: 2rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  color: var(--ink);
 }
+
+.text-athens-title {
+  font-size: 1.125rem;
+  line-height: 1.6rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.text-athens-body {
+  font-size: 0.9375rem;
+  line-height: 1.55rem;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.text-athens-small {
+  font-size: 0.8125rem;
+  line-height: 1.35rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.text-athens-semibold { font-weight: 600; }
+.text-athens-bold     { font-weight: 700; }
+
+/* Strip the heavy bold override — let each component set its own weight */
+.font-thin,
+.font-extralight,
+.font-light,
+.font-normal,
+.font-medium,
+.font-semibold {
+  /* no override — use real weights */
+}
+
+/* Panel */
+.athens-highlight {
+  margin: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--surface-border);
+  border-radius: 0.75rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 4px;
+  border-radius: 99px;
 }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+/* Mono */
 .mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
   font-size: 0.8125rem;
   line-height: 1.5;
 }
 
+/* Status dots */
 .status-dot {
   display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 50%;
 }
-.status-dot--success {
-  background: var(--status-success);
-}
-.status-dot--warning {
-  background: var(--status-warning);
-}
-.status-dot--error {
-  background: var(--status-error);
-}
+.status-dot--success { background: var(--status-success); }
+.status-dot--warning { background: var(--status-warning); }
+.status-dot--error   { background: var(--status-error); }
 .status-dot--running {
   background: var(--status-running);
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-}
-
+/* Card */
 .card {
   background: var(--surface-raised);
   border: 1px solid var(--surface-border);
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
 }
 
-.agent-text {
-  color: var(--agent);
+.agent-text { color: var(--agent); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+/* Fade-in for widgets */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeUp 0.25s ease-out both;
 }

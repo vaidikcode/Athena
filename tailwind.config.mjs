@@ -9,35 +9,60 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        sans: ["var(--font-inter)", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
         mono: ["JetBrains Mono", "Fira Code", "Consolas", "monospace"],
-        sans: ["Inter", "system-ui", "sans-serif"],
       },
       colors: {
+        /* Remap athens-* tokens to green palette — all class names kept so
+           no component files need touching */
+        athens: {
+          blue:      "#16a34a",   /* green-600 */
+          stone:     "#e2e8f0",   /* slate-200 */
+          highlight: "#f0fdf4",   /* green-50  */
+        },
+
+        /* New explicit palette for new components */
+        brand: {
+          DEFAULT: "#16a34a",
+          50:  "#f0fdf4",
+          100: "#dcfce7",
+          200: "#bbf7d0",
+          600: "#16a34a",
+          700: "#15803d",
+          900: "#14532d",
+        },
+
         ink: {
-          DEFAULT: "#e2e8f0",
-          muted: "#94a3b8",
+          DEFAULT: "#0f172a",
+          muted:  "#475569",
           subtle: "#64748b",
-          faint: "#334155",
+          faint:  "#94a3b8",
         },
+
         surface: {
-          base: "#0a0f1e",
-          raised: "#0f172a",
-          overlay: "#1e293b",
-          border: "#1e293b",
+          base:    "#f8fafc",
+          raised:  "#ffffff",
+          overlay: "#f0fdf4",
+          border:  "#e2e8f0",
         },
+
         agent: {
-          DEFAULT: "#38bdf8",
-          dim: "#0ea5e9",
+          DEFAULT: "#16a34a",
+          dim:     "#15803d",
         },
+
         status: {
-          success: "#4ade80",
-          warning: "#fbbf24",
-          error: "#f87171",
-          running: "#38bdf8",
+          success: "#16a34a",
+          warning: "#d97706",
+          error:   "#dc2626",
+          running: "#16a34a",
         },
       },
       borderColor: {
-        DEFAULT: "#1e293b",
+        DEFAULT: "#e2e8f0",
+      },
+      borderRadius: {
+        DEFAULT: "0.5rem",
       },
     },
   },

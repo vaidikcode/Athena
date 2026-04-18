@@ -22,3 +22,5 @@ drizzle/
 # Misc
 .DS_Store
 *.log
+
+.avataar

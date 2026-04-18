@@ -5,5 +5,8 @@ export default {
   dialect: "sqlite" as const,
   dbCredentials: {
     url: process.env.DATABASE_URL ?? "file:./phuko.db",
+    ...(process.env.DATABASE_AUTH_TOKEN?.trim()
+      ? { authToken: process.env.DATABASE_AUTH_TOKEN.trim() }
+      : {}),
   },
 };

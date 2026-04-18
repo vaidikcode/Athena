@@ -4,7 +4,7 @@ import { MOCK_BOTTLENECKS_CONTEXT } from "@/lib/mock/data";
 
 export const maxDuration = 60;
 
-const SYSTEM = `You are Phuko, a life-optimisation AI coach. A user has clicked on a metric that needs improvement.
+const SYSTEM = `You are Athena, a life-optimisation AI coach. A user has clicked on a metric that needs improvement.
 
 Be specific, direct, and actionable. Reference the real bottlenecks in the user's data.
 Format your response as a clean numbered list with 3–5 suggestions.

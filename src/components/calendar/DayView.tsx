@@ -186,10 +186,8 @@ export function DayView({ currentDate, events, onEventClick, conflicts }: Props)
                     height: Math.max(height, 24),
                     left: `calc(${left} + 4px)`,
                     width,
-                    background: isConflict
-                      ? `linear-gradient(135deg, ${colors.bg} 60%, #3b1a1a)`
-                      : colors.bg,
-                    borderLeft: `4px solid ${isConflict ? "#e63946" : colors.border}`,
+                    background: isConflict ? `linear-gradient(135deg, ${colors.bg} 60%, #dcdbd5)` : colors.bg,
+                    borderLeft: `4px solid ${isConflict ? "#16a34a" : colors.border}`,
                     borderRadius: 4,
                     padding: "4px 8px",
                     cursor: "pointer",
@@ -197,21 +195,25 @@ export function DayView({ currentDate, events, onEventClick, conflicts }: Props)
                     zIndex: 1,
                     opacity: ev.status === "cancelled" ? 0.4 : 1,
                     boxSizing: "border-box",
-                    boxShadow: isConflict ? "0 0 0 1px #e63946" : "none",
+                    boxShadow: isConflict ? "0 0 0 1px #16a34a" : "none",
                   }}
                 >
                   <div style={{ fontSize: 12, color: colors.text, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {ev.source === "agent" && <span style={{ marginRight: 4, fontSize: 10, opacity: 0.8 }}>✦</span>}
+                    {ev.source === "agent" && (
+                      <span style={{ marginRight: 4, fontSize: 9, fontWeight: 600, letterSpacing: "0.04em", color: "#16a34a" }}>
+                        agent
+                      </span>
+                    )}
                     {ev.title}
                   </div>
                   <div className="mono" style={{ fontSize: 10, color: "var(--ink-faint)", marginTop: 2, display: "flex", alignItems: "center", gap: 6 }}>
                     {startStr} – {endStr}
                     <span style={{ color: ENERGY_DOT[ev.energyCost] }}>●</span>
                     {ev.type.replace("_", " ")}
-                    {ev.priority >= 8 && <span style={{ color: "#e63946", fontSize: 9 }}>HIGH</span>}
+                    {ev.priority >= 8 && <span style={{ color: "#16a34a", fontSize: 9, fontWeight: 700 }}>HIGH</span>}
                   </div>
                   {ev.completedAt && (
-                    <div style={{ fontSize: 9, color: "#52b788", marginTop: 2 }}>✓ Done</div>
+                    <div style={{ fontSize: 9, color: "#16a34a", marginTop: 2, fontWeight: 600 }}>Done</div>
                   )}
                 </div>
               );

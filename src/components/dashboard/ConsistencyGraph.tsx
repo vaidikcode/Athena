@@ -1,65 +1,115 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { getMockConsistency } from "@/lib/mock/data";
-import { cn } from "@/lib/utils";
 
 const days = getMockConsistency();
 
-function barColor(score: number) {
-  if (score >= 70) return "bg-emerald-500";
-  if (score >= 50) return "bg-amber-400";
-  return "bg-red-400";
+function buildLinePath(
+  scores: number[],
+  width: number,
+  height: number,
+  padX: number,
+  padY: number
+): string {
+  if (scores.length === 0) return "";
+  const innerW = width - padX * 2;
+  const innerH = height - padY * 2;
+  const n = scores.length;
+  const pts = scores.map((s, i) => {
+    const x = padX + (n <= 1 ? innerW / 2 : (i / (n - 1)) * innerW);
+    const y = padY + innerH * (1 - s / 100);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  return `M ${pts.join(" L ")}`;
+}
+
+function buildAreaPath(
+  scores: number[],
+  width: number,
+  height: number,
+  padX: number,
+  padY: number
+): string {
+  if (scores.length === 0) return "";
+  const innerW = width - padX * 2;
+  const innerH = height - padY * 2;
+  const bottom = padY + innerH;
+  const n = scores.length;
+  const pts = scores.map((s, i) => {
+    const x = padX + (n <= 1 ? innerW / 2 : (i / (n - 1)) * innerW);
+    const y = padY + innerH * (1 - s / 100);
+    return [x, y] as [number, number];
+  });
+  const pathStr = pts.map(([x, y], i) => `${i === 0 ? "M" : "L"} ${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+  const lastX = pts[pts.length - 1][0];
+  const firstX = pts[0][0];
+  return `${pathStr} L ${lastX.toFixed(1)},${bottom} L ${firstX.toFixed(1)},${bottom} Z`;
 }
 
 export function ConsistencyGraph() {
-  const [hovered, setHovered] = useState<number | null>(null);
   const avg = Math.round(days.reduce((s, d) => s + d.score, 0) / days.length);
+  const chartW = 520;
+  const chartH = 130;
+  const padX = 8;
+  const padY = 10;
+  const pathD = useMemo(
+    () => buildLinePath(days.map((d) => d.score), chartW, chartH, padX, padY),
+    []
+  );
+  const areaD = useMemo(
+    () => buildAreaPath(days.map((d) => d.score), chartW, chartH, padX, padY),
+    []
+  );
+
+  const first = days[0]?.date ?? "";
+  const last = days[days.length - 1]?.date ?? "";
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
+    <div className="rounded-xl border border-surface-border bg-white shadow-sm overflow-hidden">
+      <div className="flex items-start justify-between gap-4 px-5 py-4 border-b border-surface-border bg-surface-base">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900">Consistency</h3>
-          <p className="text-xs text-slate-400">Last 30 days</p>
+          <h3 className="text-sm font-semibold text-ink">Consistency</h3>
+          <p className="text-xs text-ink-subtle mt-0.5">Last 30 days · completion over time</p>
         </div>
         <div className="text-right">
-          <div className="text-2xl font-bold text-emerald-600">{avg}%</div>
-          <div className="text-xs text-slate-400">avg completion</div>
+          <div className="text-2xl font-bold text-brand-600">{avg}%</div>
+          <div className="text-[11px] text-ink-faint">Average</div>
         </div>
       </div>
 
-      {/* Bars */}
-      <div className="relative flex items-end gap-0.5 h-24">
-        {days.map((d, i) => (
-          <div
-            key={d.date}
-            className="relative flex-1 group"
-            onMouseEnter={() => setHovered(i)}
-            onMouseLeave={() => setHovered(null)}
-          >
-            <div
-              className={cn("w-full rounded-t-sm transition-opacity", barColor(d.score), hovered !== null && hovered !== i ? "opacity-40" : "opacity-100")}
-              style={{ height: `${Math.max(d.score, 4)}%`, minHeight: "3px" }}
-            />
-            {hovered === i && (
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-10 pointer-events-none whitespace-nowrap rounded-lg bg-slate-900 px-2 py-1 text-[10px] text-white shadow-lg">
-                {d.date.slice(5)}<br/>
-                <span className="font-bold">{d.score}%</span> · {d.tasksCompleted}/{d.tasksTotal} tasks
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Legend */}
-      <div className="flex gap-4 mt-3">
-        {[{color:"bg-emerald-500",label:"≥70%"},{color:"bg-amber-400",label:"50–69%"},{color:"bg-red-400",label:"<50%"}].map(l => (
-          <div key={l.label} className="flex items-center gap-1.5">
-            <div className={cn("size-2 rounded-full", l.color)} />
-            <span className="text-[10px] text-slate-500">{l.label}</span>
-          </div>
-        ))}
+      <div className="px-4 pt-3 pb-2">
+        <svg
+          viewBox={`0 0 ${chartW} ${chartH}`}
+          className="h-auto w-full max-h-36"
+          role="img"
+          aria-label={`Consistency scores over the last 30 days, averaging ${avg} percent`}
+        >
+          <defs>
+            <linearGradient id="cgGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#16a34a" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#16a34a" stopOpacity="0.01" />
+            </linearGradient>
+          </defs>
+          {/* Grid lines */}
+          <line x1={padX} y1={chartH - padY} x2={chartW - padX} y2={chartH - padY} stroke="#e2e8f0" strokeWidth={1} />
+          <line x1={padX} y1={padY + (chartH - padY * 2) * 0.5} x2={chartW - padX} y2={padY + (chartH - padY * 2) * 0.5} stroke="#e2e8f0" strokeWidth={1} strokeDasharray="4 4" />
+          {/* Area fill */}
+          <path d={areaD} fill="url(#cgGrad)" />
+          {/* Line */}
+          <path
+            d={pathD}
+            fill="none"
+            stroke="#16a34a"
+            strokeWidth={2}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        </svg>
+        <div className="mt-1 flex justify-between text-[11px] tabular-nums text-ink-faint">
+          <span>{first}</span>
+          <span>{last}</span>
+        </div>
       </div>
     </div>
   );

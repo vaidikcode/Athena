@@ -39,22 +39,22 @@ export interface CalEventLog {
 
 export type CalView = "month" | "week" | "day";
 
-// ── Color helpers ────────────────────────────────────────────────────────────
+/** White + Green palette */
 export const TYPE_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  deep_work:  { bg: "#1e3a5f",  text: "#7ec8e3", border: "#2563eb" },
-  meeting:    { bg: "#3b1f2b",  text: "#f4a261", border: "#e76f51" },
-  admin:      { bg: "#1e2a1e",  text: "#a8d8a8", border: "#52b788" },
-  personal:   { bg: "#2a1a3e",  text: "#c9b1ff", border: "#9d4edd" },
-  health:     { bg: "#1f3024",  text: "#b7e4c7", border: "#40916c" },
-  learning:   { bg: "#2a2310",  text: "#ffd166", border: "#f4d35e" },
-  social:     { bg: "#2a1a1a",  text: "#ffb3b3", border: "#e63946" },
-  other:      { bg: "#1f1f2e",  text: "#b0b3d6", border: "#4a4e69" },
+  deep_work: { bg: "#16a34a", text: "#ffffff", border: "#15803d" },
+  meeting:   { bg: "#4ade80", text: "#14532d", border: "#22c55e" },
+  admin:     { bg: "#dcfce7", text: "#15803d", border: "#bbf7d0" },
+  personal:  { bg: "#f0fdf4", text: "#16a34a", border: "#dcfce7" },
+  health:    { bg: "#15803d", text: "#ffffff", border: "#14532d" },
+  learning:  { bg: "#86efac", text: "#14532d", border: "#4ade80" },
+  social:    { bg: "#bbf7d0", text: "#15803d", border: "#86efac" },
+  other:     { bg: "#f8fafc", text: "#475569", border: "#e2e8f0" },
 };
 
 export const ENERGY_DOT: Record<string, string> = {
-  low: "#52b788",
-  medium: "#f4d35e",
-  high: "#e63946",
+  low:    "#86efac",
+  medium: "#22c55e",
+  high:   "#15803d",
 };
 
 export function formatTime(iso: string): string {
@@ -63,9 +63,9 @@ export function formatTime(iso: string): string {
 }
 
 export function isSameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate();
+  return (
+    a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+  );
 }
 
 /** True if [startAt, endAt] intersects the calendar day of `day` (local midnight–end). */

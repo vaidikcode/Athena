@@ -4,19 +4,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
-  LayoutDashboard, MessageSquare, CalendarDays, Zap, Star,
-  ChevronDown, ChevronUp, Play,
+  LayoutDashboard,
+  MessageSquare,
+  CalendarDays,
+  Activity,
+  ScrollText,
+  ChevronDown,
+  ChevronUp,
+  Play,
+  Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 const NAV = [
-  { href: "/",         label: "Dashboard",     icon: LayoutDashboard, exact: true  },
-  { href: "/chat",     label: "Chat",          icon: MessageSquare,   exact: false },
-  { href: "/calendar", label: "Calendar",      icon: CalendarDays,    exact: false },
-  { href: "/activity", label: "Activity mode", icon: Zap,             exact: false },
-  { href: "/feedback", label: "Feedback",      icon: Star,            exact: false },
+  { href: "/",        label: "Overview",  icon: LayoutDashboard, exact: true },
+  { href: "/console", label: "Console",   icon: MessageSquare,   exact: false },
+  { href: "/calendar",label: "Calendar",  icon: CalendarDays,    exact: false },
+  { href: "/activity",label: "Activity",  icon: Activity,        exact: false },
+  { href: "/feedback",label: "Feedback",  icon: ScrollText,      exact: false },
 ];
 
 export function Sidebar() {
@@ -34,13 +40,24 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex h-screen w-56 shrink-0 flex-col border-r border-slate-200 bg-white">
-      <div className="px-4 py-5">
-        <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Phuko</div>
-        <div className="text-lg font-semibold text-slate-900">Schedule OS</div>
+    <aside className="flex h-screen w-52 shrink-0 flex-col bg-white border-r border-surface-border">
+      {/* Logo */}
+      <div className="px-5 py-4">
+        <div className="flex items-center gap-2.5">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-brand-600 shadow-sm">
+            <Zap className="size-4 text-white" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-ink leading-none">Phuko</p>
+            <p className="text-[11px] text-ink-faint leading-none mt-0.5">Schedule OS</p>
+          </div>
+        </div>
       </div>
-      <Separator />
-      <nav className="flex flex-1 flex-col gap-0.5 p-2">
+
+      <div className="mx-3 h-px bg-surface-border" />
+
+      {/* Nav */}
+      <nav className="flex flex-1 flex-col gap-0.5 p-2 pt-2.5">
         {NAV.map(({ href, label, icon: Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href);
           return (
@@ -48,53 +65,56 @@ export function Sidebar() {
               key={href}
               href={href}
               className={cn(
-                "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all",
                 active
-                  ? "bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-brand-50 text-brand-700 font-semibold"
+                  : "text-ink-muted hover:bg-surface-base hover:text-ink"
               )}
             >
-              <Icon className="size-4 shrink-0 opacity-80" />
+              <Icon
+                className={cn("size-4 shrink-0", active ? "text-brand-600" : "opacity-65")}
+                aria-hidden
+              />
               {label}
+              {active && (
+                <span className="ml-auto size-1.5 rounded-full bg-brand-600" />
+              )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="mt-auto border-t border-slate-100 p-2">
+      {/* Footer */}
+      <div className="border-t border-surface-border p-2">
         <button
           type="button"
-          onClick={() => setJobsOpen(v => !v)}
-          className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-[11px] font-medium text-slate-400 hover:bg-slate-50 hover:text-slate-600"
+          onClick={() => setJobsOpen((v) => !v)}
+          className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-medium text-ink-faint hover:bg-surface-base hover:text-ink-muted transition-colors"
         >
           <span>Background jobs</span>
           {jobsOpen ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
         </button>
         {jobsOpen && (
-          <div className="mt-1 space-y-1 px-1 pb-2">
-            <p className="px-1 text-[10px] leading-snug text-slate-400">
-              Hourly job scans the <strong>whole local day</strong> for bottlenecks vs rules; daily reflects on the prior
-              day.
-            </p>
-            {(["hourly","daily"] as const).map(kind => (
+          <div className="mt-1 space-y-1 px-1 pb-1">
+            {(["hourly", "daily"] as const).map((kind) => (
               <Button
                 key={kind}
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-7 w-full justify-start gap-1 text-[11px] font-normal text-slate-600"
+                className="h-7 w-full justify-start gap-1.5 text-xs"
                 disabled={jobBusy !== null}
                 onClick={() => void runJob(kind)}
               >
                 <Play className="size-3" />
-                {jobBusy === kind ? "Running…" : `Run ${kind} job`}
+                {jobBusy === kind ? "Running…" : `Run ${kind}`}
               </Button>
             ))}
           </div>
         )}
-        <div className="px-2 py-2 text-[10px] text-slate-400">
-          LLM: {process.env.NEXT_PUBLIC_LLM_PROVIDER ?? "gemini"}
-        </div>
+        <p className="px-2.5 py-1.5 text-[10px] text-ink-faint">
+          {process.env.NEXT_PUBLIC_LLM_PROVIDER ?? "gemini"}
+        </p>
       </div>
     </aside>
   );

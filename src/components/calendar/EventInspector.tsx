@@ -15,12 +15,12 @@ interface Props {
 function LogEntry({ log }: { log: CalEventLog }) {
   const atStr = new Date(log.at).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
   const actionColor: Record<string, string> = {
-    created: "#52b788",
-    updated: "#f4d35e",
-    completed: "#52b788",
-    cancelled: "#e63946",
-    rescheduled: "#f4a261",
-    annotated: "#7ec8e3",
+    created: "#16a34a",
+    updated: "#16a34a",
+    completed: "#16a34a",
+    cancelled: "#16a34a",
+    rescheduled: "#16a34a",
+    annotated: "#16a34a",
   };
 
   return (
@@ -112,7 +112,9 @@ export function EventInspector({ event, onClose, onEdit, onDelete, onComplete }:
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 14, fontWeight: 600, color: colors.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {event.source === "agent" && <span style={{ marginRight: 6, fontSize: 11 }}>✦</span>}
+              {event.source === "agent" && (
+                <span style={{ marginRight: 6, fontSize: 10, fontWeight: 600, color: "#16a34a" }}>agent</span>
+              )}
               {event.title}
             </div>
             <div className="mono" style={{ fontSize: 11, color: "var(--ink-faint)", marginTop: 4 }}>
@@ -135,7 +137,7 @@ export function EventInspector({ event, onClose, onEdit, onDelete, onComplete }:
             {startStr} – {endStr}
           </div>
           <div style={{ fontSize: 11, color: "var(--ink-subtle)", marginTop: 2 }}>
-            {durationMin} min{event.completedAt ? " · ✓ completed" : ""}
+            {durationMin} min{event.completedAt ? " · completed" : ""}
           </div>
         </section>
 
@@ -255,7 +257,7 @@ export function EventInspector({ event, onClose, onEdit, onDelete, onComplete }:
           <button
             onClick={handleComplete}
             disabled={completing}
-            style={{ flex: 1, padding: "7px 0", fontSize: 12, background: "var(--surface-overlay)", border: "1px solid #52b788", borderRadius: 4, cursor: "pointer", color: "#52b788" }}
+            style={{ flex: 1, padding: "7px 0", fontSize: 12, background: "var(--surface-overlay)", border: "1px solid #16a34a", borderRadius: 4, cursor: "pointer", color: "#16a34a" }}
           >
             {completing ? "…" : "Complete"}
           </button>
@@ -263,7 +265,7 @@ export function EventInspector({ event, onClose, onEdit, onDelete, onComplete }:
         <button
           onClick={handleDelete}
           disabled={deleting}
-          style={{ padding: "7px 14px", fontSize: 12, background: "transparent", border: "1px solid #e63946", borderRadius: 4, cursor: "pointer", color: "#e63946" }}
+          style={{ padding: "7px 14px", fontSize: 12, background: "transparent", border: "1px solid #16a34a", borderRadius: 4, cursor: "pointer", color: "#16a34a" }}
         >
           {deleting ? "…" : "Delete"}
         </button>

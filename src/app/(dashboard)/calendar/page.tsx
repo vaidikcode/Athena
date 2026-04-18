@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { AlertTriangle } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { TopBar } from "@/components/layout/TopBar";
 import { CalendarShell } from "@/components/calendar/CalendarShell";
@@ -175,18 +176,9 @@ export default function CalendarPage() {
 
       {/* Conflict badge */}
       {conflicts.length > 0 && (
-        <div style={{
-          background: "#3b1a1a",
-          borderBottom: "1px solid #e63946",
-          padding: "6px 16px",
-          fontSize: 12,
-          color: "#e63946",
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          flexShrink: 0,
-        }}>
-          ⚠ {conflicts.length} scheduling conflict{conflicts.length > 1 ? "s" : ""} detected
+        <div className="flex shrink-0 items-center gap-2 border-b border-athens-stone bg-athens-highlight px-4 py-2 text-xs font-semibold text-athens-blue">
+          <AlertTriangle className="size-4 shrink-0" aria-hidden />
+          {conflicts.length} scheduling conflict{conflicts.length > 1 ? "s" : ""} detected
         </div>
       )}
 

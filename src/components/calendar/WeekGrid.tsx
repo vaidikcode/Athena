@@ -190,9 +190,9 @@ export function WeekGrid({ currentDate, events, onEventClick, conflicts }: Props
                         left,
                         width,
                         background: isConflict
-                          ? `linear-gradient(135deg, ${colors.bg} 60%, #3b1a1a)`
+                          ? `linear-gradient(135deg, ${colors.bg} 60%, #dcdbd5)`
                           : colors.bg,
-                        borderLeft: `3px solid ${isConflict ? "#e63946" : colors.border}`,
+                        borderLeft: `3px solid ${isConflict ? "#16a34a" : colors.border}`,
                         borderRadius: 3,
                         padding: "2px 5px",
                         cursor: "pointer",
@@ -203,7 +203,9 @@ export function WeekGrid({ currentDate, events, onEventClick, conflicts }: Props
                       }}
                     >
                       <div style={{ fontSize: 10, color: colors.text, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {ev.source === "agent" && <span style={{ marginRight: 3, opacity: 0.8 }}>✦</span>}
+                        {ev.source === "agent" && (
+                          <span style={{ marginRight: 3, fontSize: 8, fontWeight: 600, color: "#16a34a" }}>agent</span>
+                        )}
                         {ev.title}
                       </div>
                       <div className="mono" style={{ fontSize: 9, color: "var(--ink-faint)", marginTop: 1 }}>

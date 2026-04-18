@@ -8,7 +8,10 @@ export async function register() {
   const { seedDemoCalendarEvents } = await import("@/lib/calendar/seed-demo-events");
   await seedDemoCalendarEvents().catch((err) => console.error("[seed] calendar demo events:", err));
 
-  // Start cron scheduler (HMR-safe singleton)
-  const { start } = await import("@/lib/cron/scheduler");
-  start();
+  // In-process cron (setInterval) only makes sense on a long-lived Node server.
+  // On Vercel, use visit-triggered jobs (`/api/jobs/visit`) instead.
+  if (process.env.VERCEL !== "1" && process.env.CRON_ENABLED === "true") {
+    const { start } = await import("@/lib/cron/scheduler");
+    start();
+  }
 }

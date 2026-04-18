@@ -26,10 +26,10 @@ export const MOCK_METRICS = {
 };
 
 export const MOCK_POINTS = {
-  health:    { value: 340, max: 500, delta: +12, trend: "up"   as const },
-  knowledge: { value: 520, max: 700, delta: +28, trend: "up"   as const },
-  money:     { value: 280, max: 500, delta: -15, trend: "down" as const },
-  work:      { value: 650, max: 700, delta:  +5, trend: "up"   as const },
+  health:    { value: 340, max: 500, delta: +12, trend: "up"   as const, streakWeeks: 6 },
+  knowledge: { value: 520, max: 700, delta: +28, trend: "up"   as const, streakWeeks: 10 },
+  money:     { value: 280, max: 500, delta: -15, trend: "down" as const, streakWeeks: 0 },
+  work:      { value: 650, max: 700, delta:  +5, trend: "up"   as const, streakWeeks: 14 },
 };
 
 export type RelStatus = "strong" | "warm" | "needs-attention";
@@ -106,10 +106,10 @@ export function getDemoSourceEvents(): Array<DemoEventRow & { date: string }> {
 }
 
 export const MOCK_DATA_SOURCES = [
-  { id:"notion",      label:"Notion",        abbr:"N", color:"bg-gray-800",   lastSync:"4 min ago", eventCount:3, status:"connected" as const },
-  { id:"slack",       label:"Slack",         abbr:"S", color:"bg-violet-600", lastSync:"1 min ago", eventCount:3, status:"connected" as const },
-  { id:"google-docs", label:"Google Docs",   abbr:"G", color:"bg-blue-500",   lastSync:"7 min ago", eventCount:2, status:"connected" as const },
-  { id:"browser",     label:"Browser Hist.", abbr:"B", color:"bg-orange-500", lastSync:"just now",  eventCount:3, status:"connected" as const },
+  { id:"notion",      label:"Notion",        abbr:"N", color:"bg-brand-600 text-white",             lastSync:"4 min ago", eventCount:3, status:"connected" as const },
+  { id:"slack",       label:"Slack",         abbr:"S", color:"bg-brand-500 text-white",             lastSync:"1 min ago", eventCount:3, status:"connected" as const },
+  { id:"google-docs", label:"Google Docs",   abbr:"G", color:"bg-brand-400 text-white",             lastSync:"7 min ago", eventCount:2, status:"connected" as const },
+  { id:"browser",     label:"Browser Hist.", abbr:"B", color:"bg-surface-base text-brand-700 ring-1 ring-inset ring-brand-200", lastSync:"just now", eventCount:3, status:"connected" as const },
 ];
 
 export const MOCK_BOTTLENECKS_CONTEXT = `

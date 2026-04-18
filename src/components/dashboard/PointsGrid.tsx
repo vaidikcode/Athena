@@ -1,73 +1,113 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
+import {
+  Activity,
+  ScrollText,
+  CircleDollarSign,
+  Briefcase,
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+} from "lucide-react";
 import { MOCK_POINTS } from "@/lib/mock/data";
 import { cn } from "@/lib/utils";
-import { TrendingUp, TrendingDown } from "lucide-react";
 
-const POINT_META = {
-  health:    { label:"Health",    emoji:"💪", color:"emerald", bg:"bg-emerald-50", ring:"ring-emerald-200", bar:"bg-emerald-500", text:"text-emerald-700" },
-  knowledge: { label:"Knowledge", emoji:"📚", color:"blue",    bg:"bg-blue-50",    ring:"ring-blue-200",    bar:"bg-blue-500",    text:"text-blue-700"    },
-  money:     { label:"Money",     emoji:"💰", color:"amber",   bg:"bg-amber-50",   ring:"ring-amber-200",   bar:"bg-amber-500",   text:"text-amber-700"   },
-  work:      { label:"Work",      emoji:"💼", color:"violet",  bg:"bg-violet-50",  ring:"ring-violet-200",  bar:"bg-violet-500",  text:"text-violet-700"  },
-} as const;
+const POINT_META: Record<
+  keyof typeof MOCK_POINTS,
+  { label: string; Icon: LucideIcon }
+> = {
+  health:    { label: "Health",    Icon: Activity },
+  knowledge: { label: "Knowledge", Icon: ScrollText },
+  money:     { label: "Money",     Icon: CircleDollarSign },
+  work:      { label: "Work",      Icon: Briefcase },
+};
+
+function streakMultiplier(streakWeeks: number): number {
+  if (streakWeeks >= 10) return 1.25;
+  if (streakWeeks >= 6)  return 1.15;
+  if (streakWeeks >= 3)  return 1.1;
+  if (streakWeeks >= 1)  return 1.05;
+  return 1;
+}
+
+function formatMult(m: number): string {
+  if (m <= 1) return "×1";
+  const n = Math.round(m * 100) / 100;
+  return `×${n}`;
+}
 
 type MetricKey = keyof typeof POINT_META;
 
-function PointCard({ metricKey, onMetricClick }: { metricKey: MetricKey; onMetricClick: (metric: string, value: number, max: number) => void }) {
+function PointRow({
+  metricKey,
+  onMetricClick,
+}: {
+  metricKey: MetricKey;
+  onMetricClick: (metric: string, value: number, max: number) => void;
+}) {
   const data = MOCK_POINTS[metricKey];
   const meta = POINT_META[metricKey];
-  const pct = (data.value / data.max) * 100;
-  const isLow = pct < 50;
-  const isMed = pct >= 50 && pct < 75;
+  const { Icon } = meta;
+  const mult = streakMultiplier(data.streakWeeks);
+  const basePct = (data.value / data.max) * 100;
+  const boosted = Math.min(100, Math.round(basePct * mult));
 
   return (
-    <button
-      type="button"
-      onClick={() => onMetricClick(metricKey, data.value, data.max)}
-      className={cn(
-        "relative rounded-2xl border bg-white p-5 text-left shadow-sm transition-all hover:shadow-md group",
-        isLow ? "border-red-200 hover:border-red-400" : isMed ? "border-amber-200 hover:border-amber-400" : "border-slate-200 hover:border-emerald-300"
-      )}
-    >
-      {isLow && (
-        <div className="absolute top-2 right-2 rounded-full bg-red-100 px-2 py-0.5 text-[9px] font-bold text-red-600 uppercase tracking-wide">
-          Low
+    <li>
+      <button
+        type="button"
+        onClick={() => onMetricClick(metricKey, data.value, data.max)}
+        className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-surface-base transition-colors"
+      >
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 border border-brand-200">
+          <Icon className="size-4 text-brand-600" aria-hidden />
         </div>
-      )}
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-xl">{meta.emoji}</span>
-        <span className="text-sm font-semibold text-slate-700">{meta.label}</span>
-      </div>
-      <div className="text-3xl font-bold text-slate-900">
-        {data.value}
-        <span className="text-sm font-normal text-slate-400">/{data.max}</span>
-      </div>
-      <div className="mt-3 h-1.5 w-full rounded-full bg-slate-100">
-        <div
-          className={cn("h-full rounded-full transition-all duration-700", meta.bar)}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <div className={cn("mt-2 flex items-center gap-1 text-xs font-medium", data.trend === "up" ? "text-emerald-600" : "text-red-500")}>
-        {data.trend === "up" ? <TrendingUp className="size-3" /> : <TrendingDown className="size-3" />}
-        {data.delta > 0 ? "+" : ""}{data.delta} this week
-      </div>
-      <div className="mt-2 text-[10px] text-slate-400 group-hover:text-slate-600 transition-colors">
-        {isLow ? "Click to fix →" : "Click for insights →"}
-      </div>
-    </button>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="text-sm font-semibold text-ink">{meta.label}</span>
+            <span className="text-base font-bold text-ink tabular-nums">
+              {boosted}
+              <span className="text-xs font-normal text-ink-faint">/100</span>
+            </span>
+          </div>
+          <div className="mt-1.5 h-1.5 w-full rounded-full bg-surface-border overflow-hidden">
+            <div className="h-full rounded-full bg-brand-600 transition-all" style={{ width: `${boosted}%` }} />
+          </div>
+          <div className="mt-1 flex items-center gap-2">
+            <span className="text-[11px] text-ink-faint">{data.streakWeeks}w streak</span>
+            {mult > 1 && (
+              <span className="text-[11px] font-semibold text-brand-600 bg-brand-50 rounded px-1">
+                {formatMult(mult)}
+              </span>
+            )}
+            <span className={cn("ml-auto flex items-center gap-0.5 text-[11px] font-medium", data.trend === "up" ? "text-brand-700" : "text-ink-faint")}>
+              {data.trend === "up" ? <TrendingUp className="size-3" /> : <TrendingDown className="size-3" />}
+              {data.delta > 0 ? "+" : ""}{data.delta}
+            </span>
+          </div>
+        </div>
+      </button>
+    </li>
   );
 }
 
 export function PointsGrid({ onMetricClick }: { onMetricClick: (metric: string, value: number, max: number) => void }) {
   return (
-    <div>
-      <h3 className="text-sm font-semibold text-slate-900 mb-3">Life points</h3>
-      <div className="grid grid-cols-2 gap-4">
-        {(Object.keys(POINT_META) as MetricKey[]).map(k => (
-          <PointCard key={k} metricKey={k} onMetricClick={onMetricClick} />
-        ))}
+    <div className="rounded-xl border border-surface-border bg-white shadow-sm overflow-hidden">
+      <div className="flex items-center gap-2 px-5 py-3 border-b border-surface-border bg-surface-base">
+        <BarChart3 className="size-4 text-brand-600 shrink-0" />
+        <h3 className="text-sm font-semibold text-ink">Life scores</h3>
       </div>
+      <p className="px-5 py-3 text-xs text-ink-subtle border-b border-surface-border">
+        Streak multiplier: sustained weekly consistency raises your displayed score.
+      </p>
+      <ul className="divide-y divide-surface-border">
+        {(Object.keys(POINT_META) as MetricKey[]).map((k) => (
+          <PointRow key={k} metricKey={k} onMetricClick={onMetricClick} />
+        ))}
+      </ul>
     </div>
   );
 }

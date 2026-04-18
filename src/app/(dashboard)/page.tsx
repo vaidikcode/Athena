@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Flame } from "lucide-react";
+import { Flame, Zap } from "lucide-react";
 import { loadSessionUser } from "@/lib/client/user-session";
 import { MOCK_METRICS } from "@/lib/mock/data";
 import { ConsistencyGraph } from "@/components/dashboard/ConsistencyGraph";
@@ -31,17 +31,24 @@ export default function DashboardPage() {
   return (
     <>
       <div className="flex h-full min-h-0 overflow-hidden">
-        {/* Middle — main stats */}
-        <div className="flex-1 min-w-0 overflow-y-auto px-6 py-6 space-y-6">
+        {/* Main content */}
+        <div className="flex-1 min-w-0 overflow-y-auto px-6 py-6 space-y-5">
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-bold text-slate-900">{greeting()}, {name}</h1>
-              <p className="text-sm text-slate-500 mt-0.5">Here's your life dashboard for today.</p>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="flex size-10 items-center justify-center rounded-xl bg-brand-600 shadow-sm mt-0.5 shrink-0">
+                <Zap className="size-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-ink tracking-tight">
+                  {greeting()}, {name}
+                </h1>
+                <p className="text-sm text-ink-subtle mt-0.5">Your schedule overview for today.</p>
+              </div>
             </div>
-            <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-2">
-              <Flame className="size-4 text-amber-500" />
-              <span className="text-sm font-bold text-amber-700">{MOCK_METRICS.streakDays} day streak</span>
+            <div className="flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-3.5 py-1.5 shrink-0">
+              <Flame className="size-4 text-brand-600 shrink-0" />
+              <span className="text-sm font-semibold text-brand-700">{MOCK_METRICS.streakDays} day streak</span>
             </div>
           </div>
 
@@ -50,11 +57,11 @@ export default function DashboardPage() {
           <PointsGrid onMetricClick={openModal} />
           <RelationshipsPanel onMetricClick={openModal} />
           <DataSourcesPanel />
-          <div className="h-8" />
+          <div className="h-6" />
         </div>
 
         {/* Right — calendar */}
-        <div className="w-72 shrink-0 border-l border-slate-200 bg-white overflow-y-auto px-4 py-6">
+        <div className="w-72 shrink-0 overflow-y-auto border-l border-surface-border bg-white px-4 py-6">
           <CalendarWidget />
         </div>
       </div>

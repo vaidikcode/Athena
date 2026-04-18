@@ -113,7 +113,7 @@ export function EventDialog({ event, defaultDate, onSave, onClose }: Props) {
           <h2 style={{ margin: 0, fontSize: 15, fontWeight: 600, color: "var(--ink)" }}>
             {event ? "Edit Event" : "New Event"}
             {event?.source === "agent" && (
-              <span style={{ marginLeft: 8, fontSize: 11, color: "var(--agent)", fontWeight: 400 }}>✦ agent-created</span>
+              <span style={{ marginLeft: 8, fontSize: 11, color: "#16a34a", fontWeight: 600 }}>Agent-created</span>
             )}
           </h2>
           <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--ink-subtle)", fontSize: 18 }}>×</button>

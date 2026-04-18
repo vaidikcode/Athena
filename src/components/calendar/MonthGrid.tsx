@@ -151,7 +151,7 @@ export function MonthGrid({ currentDate, events, onEventClick, onDayClick }: Pro
                         title={ev.title}
                       >
                         {ev.source === "agent" && (
-                          <span style={{ fontSize: 8, opacity: 0.8 }}>✦</span>
+                          <span style={{ fontSize: 7, fontWeight: 600, color: "#16a34a" }}>a</span>
                         )}
                         {ev.allDay ? "" : new Date(ev.startAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }) + " "}
                         {ev.title}

@@ -2,8 +2,7 @@ import "server-only";
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import * as schema from "./schema";
-
-const url = process.env.DATABASE_URL ?? "file:./phuko.db";
+import { getLibsqlClientOptions } from "./libsql-config";
 
 type PhukoDb = ReturnType<typeof drizzle<typeof schema>>;
 
@@ -12,7 +11,7 @@ declare global {
   var __phukoDb: PhukoDb | undefined;
 }
 
-const client = createClient({ url });
+const client = createClient(getLibsqlClientOptions());
 export const db: PhukoDb =
   globalThis.__phukoDb ?? drizzle(client, { schema });
 if (!globalThis.__phukoDb) globalThis.__phukoDb = db;

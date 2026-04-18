@@ -97,7 +97,7 @@ export function ToolsPageClient({ tools }: { tools: ToolRow[] }) {
     }
     const p = await Notification.requestPermission();
     if (p === "granted") {
-      new Notification("Phuko", {
+      new Notification("Athena", {
         body: "You will see alerts here when something needs your attention.",
       });
       setNotifHint("Notifications are on. You will also see the preview list below when you refresh it.");
@@ -111,21 +111,21 @@ export function ToolsPageClient({ tools }: { tools: ToolRow[] }) {
       <TopBar title="Tools" subtitle="What the assistant can call on your behalf" />
       <div className="flex-1 overflow-auto px-6 py-6">
         <div className="mx-auto max-w-3xl space-y-6">
-          <Card className="border-emerald-100 bg-emerald-50/40">
+          <Card className="border-athens-stone bg-athens-highlight/60">
             <CardHeader className="py-4">
-              <CardTitle className="text-base text-emerald-950">Account & device</CardTitle>
-              <CardDescription className="text-sm text-emerald-900/85">
+              <CardTitle className="text-base text-athens-blue">Account & device</CardTitle>
+              <CardDescription className="text-sm font-light text-athens-blue/80">
                 Google sign-in and notification preview. Use another account or add a second device from here anytime.
               </CardDescription>
             </CardHeader>
-            <div className="space-y-4 border-t border-emerald-100/90 px-6 pb-6 pt-2">
+            <div className="space-y-4 border-t border-athens-stone px-6 pb-6 pt-2">
               <div className="flex flex-wrap items-center gap-3">
                 {sessionUser ? (
                   <>
-                    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm">
-                      <div className="font-medium text-slate-900">{sessionUser.displayName}</div>
-                      <div className="text-xs text-slate-500">{sessionUser.email}</div>
-                      <div className="mt-1 text-[10px] text-slate-400">
+                    <div className="rounded-lg border border-athens-stone bg-white px-3 py-2 text-sm shadow-sm">
+                      <div className="font-semibold text-athens-blue">{sessionUser.displayName}</div>
+                      <div className="text-xs font-light text-athens-blue/65">{sessionUser.email}</div>
+                      <div className="mt-1 text-[10px] font-light text-athens-blue/50">
                         Signed in · {new Date(sessionUser.signedAt).toLocaleString()}
                       </div>
                     </div>
@@ -154,23 +154,23 @@ export function ToolsPageClient({ tools }: { tools: ToolRow[] }) {
                 </Button>
               </div>
 
-              {notifHint ? <p className="text-xs leading-relaxed text-emerald-900/80">{notifHint}</p> : null}
+              {notifHint ? <p className="text-xs font-light leading-relaxed text-athens-blue/75">{notifHint}</p> : null}
 
               {notifications.length > 0 ? (
-                <ul className="space-y-2 rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+                <ul className="space-y-2 rounded-lg border border-athens-stone bg-white p-3 shadow-sm">
                   {notifications.map((n) => (
                     <li
                       key={n.id}
-                      className="border-b border-slate-100 pb-2 text-sm last:border-0 last:pb-0"
+                      className="border-b border-athens-stone pb-2 text-sm last:border-0 last:pb-0"
                     >
                       <div className="flex items-baseline justify-between gap-2">
-                        <span className="font-medium text-slate-800">{n.title}</span>
-                        <span className="shrink-0 font-mono text-[10px] text-slate-400">
+                        <span className="font-medium text-athens-blue">{n.title}</span>
+                        <span className="shrink-0 font-mono text-[10px] text-athens-blue/45">
                           {new Date(n.at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}
                         </span>
                       </div>
-                      <div className="text-xs text-slate-500">
-                        <span className="font-semibold text-emerald-800">{n.app}</span> · {n.body}
+                      <div className="text-xs font-light text-athens-blue/65">
+                        <span className="font-semibold text-athens-blue">{n.app}</span> · {n.body}
                       </div>
                     </li>
                   ))}
@@ -179,15 +179,17 @@ export function ToolsPageClient({ tools }: { tools: ToolRow[] }) {
             </div>
           </Card>
 
-          <p className="text-sm text-slate-500">
+          <p className="text-sm font-light text-athens-blue/70">
             Ask in the chat in plain language—you never need to type tool names. Below is only a reference.
           </p>
           <div className="grid gap-3">
             {tools.map((t) => (
-              <Card key={t.name} className="border-slate-200">
+              <Card key={t.name} className="border-athens-stone">
                 <CardHeader className="py-3">
-                  <CardTitle className="font-mono text-sm text-emerald-800">{t.name}</CardTitle>
-                  <CardDescription className="text-sm leading-relaxed text-slate-600">{t.description}</CardDescription>
+                  <CardTitle className="font-mono text-sm text-athens-blue">{t.name}</CardTitle>
+                  <CardDescription className="text-sm font-light leading-relaxed text-athens-blue/75">
+                    {t.description}
+                  </CardDescription>
                 </CardHeader>
               </Card>
             ))}
@@ -197,7 +199,7 @@ export function ToolsPageClient({ tools }: { tools: ToolRow[] }) {
 
       {loginOpen ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-athens-blue/25 p-4 backdrop-blur-sm"
           role="presentation"
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) setLoginOpen(false);
@@ -207,20 +209,20 @@ export function ToolsPageClient({ tools }: { tools: ToolRow[] }) {
             role="dialog"
             aria-modal="true"
             aria-labelledby={dialogTitleId}
-            className="relative w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl"
+            className="relative w-full max-w-sm rounded-2xl border border-athens-stone bg-white p-6 shadow-xl"
           >
             <button
               type="button"
-              className="absolute right-3 top-3 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="absolute right-3 top-3 rounded-md p-1 text-athens-blue/50 hover:bg-athens-highlight hover:text-athens-blue"
               aria-label="Close"
               onClick={() => setLoginOpen(false)}
             >
               <X className="size-4" />
             </button>
-            <h2 id={dialogTitleId} className="pr-8 text-lg font-semibold text-slate-900">
+            <h2 id={dialogTitleId} className="pr-8 text-lg font-semibold text-athens-blue">
               Sign in
             </h2>
-            <p className="mt-1 text-sm text-slate-500">to continue to Phuko</p>
+            <p className="mt-1 text-sm font-light text-athens-blue/70">to continue to Athena</p>
             <div className="mt-6">
               <GoogleAccountForm onSuccess={() => setLoginOpen(false)} />
             </div>

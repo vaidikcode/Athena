@@ -4,11 +4,23 @@ import { MOCK_RELATIONSHIPS, type RelStatus } from "@/lib/mock/data";
 import { cn } from "@/lib/utils";
 import { Users } from "lucide-react";
 
-const STATUS_STYLES: Record<RelStatus, { dot: string; label: string; labelColor: string }> = {
-  "strong":          { dot:"bg-emerald-500", label:"Strong",          labelColor:"text-emerald-600" },
-  "warm":            { dot:"bg-amber-400",   label:"Warm",            labelColor:"text-amber-600"   },
-  "needs-attention": { dot:"bg-red-400",     label:"Needs attention", labelColor:"text-red-500"     },
+const STATUS_STYLES: Record<RelStatus, { label: string; color: string }> = {
+  strong:           { label: "Strong",          color: "text-brand-700 bg-brand-50"  },
+  warm:             { label: "Warm",             color: "text-brand-600 bg-brand-50"  },
+  "needs-attention":{ label: "Needs attention",  color: "text-amber-700 bg-amber-50"  },
 };
+
+function barColor(score: number): string {
+  if (score >= 70) return "bg-brand-600";
+  if (score >= 50) return "bg-brand-400";
+  return "bg-brand-200";
+}
+
+function avatarColor(score: number): string {
+  if (score >= 80) return "bg-brand-600 text-white";
+  if (score >= 60) return "bg-brand-200 text-brand-800";
+  return "bg-surface-border text-ink-subtle";
+}
 
 export function RelationshipsPanel({
   onMetricClick,
@@ -16,57 +28,49 @@ export function RelationshipsPanel({
   onMetricClick: (metric: string, value: number, max: number) => void;
 }) {
   return (
-    <div>
-      <div className="flex items-center gap-2 mb-3">
-        <Users className="size-4 text-slate-500" />
-        <h3 className="text-sm font-semibold text-slate-900">Relationships</h3>
+    <div className="rounded-xl border border-surface-border bg-white shadow-sm overflow-hidden">
+      <div className="flex items-center gap-2 px-5 py-3 border-b border-surface-border bg-surface-base">
+        <Users className="size-4 text-brand-600 shrink-0" />
+        <h3 className="text-sm font-semibold text-ink">Relationships</h3>
       </div>
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-        {MOCK_RELATIONSHIPS.map((r, i) => {
+      <ul className="divide-y divide-surface-border">
+        {MOCK_RELATIONSHIPS.map((r) => {
           const st = STATUS_STYLES[r.status];
-          const pct = r.score;
           return (
-            <button
-              key={r.id}
-              type="button"
-              onClick={() => onMetricClick(`relationship-${r.label}`, r.score, 100)}
-              className={cn(
-                "w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-slate-50 transition-colors group",
-                i > 0 && "border-t border-slate-100"
-              )}
-            >
-              {/* Avatar */}
-              <div className={cn(
-                "flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white",
-                r.score >= 80 ? "bg-emerald-500" : r.score >= 60 ? "bg-amber-400" : "bg-red-400"
-              )}>
-                {r.label.charAt(0)}
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-slate-800 truncate">{r.label}</span>
-                  <span className={cn("text-[10px] font-medium", st.labelColor)}>{st.label}</span>
+            <li key={r.id}>
+              <button
+                type="button"
+                onClick={() => onMetricClick(`relationship-${r.label}`, r.score, 100)}
+                className="group flex w-full items-center gap-3 px-5 py-3.5 text-left transition-colors hover:bg-surface-base"
+              >
+                <div className={cn("flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-bold", avatarColor(r.score))}>
+                  {r.label.charAt(0)}
                 </div>
-                <div className="mt-1 flex items-center gap-2">
-                  <div className="flex-1 h-1 rounded-full bg-slate-100">
-                    <div
-                      className={cn("h-full rounded-full", r.score >= 70 ? "bg-emerald-500" : r.score >= 50 ? "bg-amber-400" : "bg-red-400")}
-                      style={{ width: `${pct}%` }}
-                    />
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="truncate text-sm font-medium text-ink">{r.label}</span>
+                    <span className={cn("text-[10px] font-semibold rounded px-1", st.color)}>{st.label}</span>
                   </div>
-                  <span className="text-[10px] text-slate-400 shrink-0">{r.score}/100</span>
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <div className="h-1 flex-1 rounded-full bg-surface-border">
+                      <div className={cn("h-full rounded-full transition-all", barColor(r.score))} style={{ width: `${r.score}%` }} />
+                    </div>
+                    <span className="shrink-0 text-[10px] text-ink-faint tabular-nums">{r.score}/100</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="text-right shrink-0">
-                <div className="text-[10px] text-slate-400">{r.lastContact}</div>
-                <div className="text-[10px] text-slate-300 group-hover:text-slate-500 mt-0.5 transition-colors">suggest →</div>
-              </div>
-            </button>
+                <div className="shrink-0 text-right">
+                  <div className="text-[11px] text-ink-faint">{r.lastContact}</div>
+                  <div className="mt-0.5 text-[11px] text-ink-faint group-hover:text-brand-600 transition-colors">
+                    suggest →
+                  </div>
+                </div>
+              </button>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 }

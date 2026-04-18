@@ -1,9 +1,9 @@
 import "server-only";
 import { createClient } from "@libsql/client";
+import { getLibsqlClientOptions } from "./libsql-config";
 
 export async function runMigrations(): Promise<void> {
-  const url = process.env.DATABASE_URL ?? "file:./phuko.db";
-  const client = createClient({ url });
+  const client = createClient(getLibsqlClientOptions());
 
   await client.executeMultiple(`
     CREATE TABLE IF NOT EXISTS memories (

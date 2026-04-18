@@ -1,18 +1,30 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Check, Plus, Trash2, Loader2, ArrowRight, Zap } from "lucide-react";
+import {
+  Check,
+  Plus,
+  Trash2,
+  Loader2,
+  ArrowRight,
+  Activity,
+  Briefcase,
+  ScrollText,
+  CircleDollarSign,
+  HeartHandshake,
+  Landmark,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Step = 1 | 2 | 3;
 
 const PRIORITY_OPTIONS = [
-  { id:"health",    label:"Health",        emoji:"💪" },
-  { id:"work",      label:"Work",          emoji:"💼" },
-  { id:"knowledge", label:"Knowledge",     emoji:"📚" },
-  { id:"money",     label:"Money",         emoji:"💰" },
-  { id:"relations", label:"Relationships", emoji:"❤️" },
-];
+  { id: "health", label: "Health", Icon: Activity },
+  { id: "work", label: "Work", Icon: Briefcase },
+  { id: "knowledge", label: "Knowledge", Icon: ScrollText },
+  { id: "money", label: "Money", Icon: CircleDollarSign },
+  { id: "relations", label: "Relationships", Icon: HeartHandshake },
+] as const;
 
 const DEFAULT_RULES = [
   "No meetings before 10 am",
@@ -23,11 +35,11 @@ const DEFAULT_RULES = [
 ];
 
 const SOURCES = [
-  { id:"notion",      label:"Notion",        abbr:"N", color:"bg-gray-800"   },
-  { id:"slack",       label:"Slack",         abbr:"S", color:"bg-violet-600" },
-  { id:"google-docs", label:"Google Docs",   abbr:"G", color:"bg-blue-500"   },
-  { id:"browser",     label:"Browser Hist.", abbr:"B", color:"bg-orange-500" },
-];
+  { id: "notion", label: "Notion", abbr: "N", color: "bg-athens-blue" },
+  { id: "slack", label: "Slack", abbr: "S", color: "bg-athens-blue/85" },
+  { id: "google-docs", label: "Google Docs", abbr: "G", color: "bg-athens-blue/70" },
+  { id: "browser", label: "Browser Hist.", abbr: "B", color: "bg-white text-athens-blue ring-1 ring-inset ring-athens-stone" },
+] as const;
 
 export function RulesSetup({ onComplete }: { onComplete: () => void }) {
   const [step, setStep] = useState<Step>(1);
@@ -83,17 +95,17 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
   const removeRule = (i: number) => setRules(prev => prev.filter((_, idx) => idx !== i));
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 px-4 py-12">
-      <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white shadow-xl">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-athens-stone px-4 py-12">
+      <div className="w-full max-w-lg rounded-2xl border border-athens-stone bg-white shadow-xl">
         {/* Header */}
-        <div className="border-b border-slate-100 px-8 py-6">
+        <div className="border-b border-athens-stone px-8 py-6">
           <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-full bg-emerald-600 text-white">
-              <Zap className="size-4" />
+            <div className="flex size-9 items-center justify-center rounded-full bg-athens-blue text-white">
+              <Landmark className="size-4" aria-hidden />
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700">Phuko</div>
-              <div className="text-lg font-semibold text-slate-900">Set up your OS</div>
+              <div className="text-xs font-semibold uppercase tracking-wider text-athens-blue/80">Athena</div>
+              <div className="text-lg font-semibold text-athens-blue">Set up your OS</div>
             </div>
             <div className="ml-auto flex gap-1.5">
               {([1,2,3] as Step[]).map(s => (
@@ -101,7 +113,7 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
                   key={s}
                   className={cn(
                     "size-2 rounded-full transition-colors",
-                    s === step ? "bg-emerald-600" : s < step ? "bg-emerald-300" : "bg-slate-200"
+                    s === step ? "bg-athens-blue" : s < step ? "bg-athens-blue/40" : "bg-athens-stone"
                   )}
                 />
               ))}
@@ -113,11 +125,13 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
           {step === 1 && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-base font-semibold text-slate-900">What matters most to you?</h2>
-                <p className="mt-1 text-sm text-slate-500">Select your top priorities. Phuko will optimise your schedule around these.</p>
+                <h2 className="text-base font-semibold text-athens-blue">What matters most to you?</h2>
+                <p className="mt-1 text-sm font-light text-athens-blue/70">
+                  Select your top priorities. Athena will optimise your schedule around these.
+                </p>
               </div>
               <div className="flex flex-wrap gap-2">
-                {PRIORITY_OPTIONS.map(p => (
+                {PRIORITY_OPTIONS.map((p) => (
                   <button
                     key={p.id}
                     type="button"
@@ -125,11 +139,11 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
                     className={cn(
                       "flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all",
                       priorities.includes(p.id)
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-900 ring-1 ring-emerald-400/50"
-                        : "border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                        ? "border-athens-blue bg-athens-highlight text-athens-blue ring-1 ring-athens-stone"
+                        : "border-athens-stone text-athens-blue/80 hover:border-athens-blue/40 hover:bg-athens-highlight/50"
                     )}
                   >
-                    <span>{p.emoji}</span>
+                    <p.Icon className="size-4 shrink-0" aria-hidden />
                     {p.label}
                     {priorities.includes(p.id) && <Check className="size-3.5" />}
                   </button>
@@ -143,14 +157,14 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
                   { label:"Deep work (hrs)",  value:deepWorkHours, set:setDeepWorkHours, type:"number" },
                 ].map(f => (
                   <div key={f.label}>
-                    <label className="block text-xs font-medium text-slate-600 mb-1">{f.label}</label>
+                    <label className="mb-1 block text-xs font-medium text-athens-blue/75">{f.label}</label>
                     <input
                       type={f.type ?? "time"}
                       value={f.value}
                       onChange={e => f.set(e.target.value)}
                       min={f.type === "number" ? "1" : undefined}
                       max={f.type === "number" ? "8" : undefined}
-                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-600/25"
+                      className="w-full rounded-lg border border-athens-stone px-3 py-2 text-sm text-athens-blue outline-none focus:border-athens-blue focus:ring-2 focus:ring-athens-blue/20"
                     />
                   </div>
                 ))}
@@ -161,17 +175,19 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
           {step === 2 && (
             <div className="space-y-5">
               <div>
-                <h2 className="text-base font-semibold text-slate-900">Your ground rules</h2>
-                <p className="mt-1 text-sm text-slate-500">Rules Phuko will protect when planning your schedule. Edit or add your own.</p>
+                <h2 className="text-base font-semibold text-athens-blue">Your ground rules</h2>
+                <p className="mt-1 text-sm font-light text-athens-blue/70">
+                  Rules Athena will protect when planning your schedule. Edit or add your own.
+                </p>
               </div>
               <ul className="space-y-2">
                 {rules.map((r, i) => (
-                  <li key={i} className="flex items-start gap-2 rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5">
-                    <div className="mt-0.5 size-4 shrink-0 rounded-full bg-emerald-100 flex items-center justify-center">
-                      <div className="size-1.5 rounded-full bg-emerald-600" />
+                  <li key={i} className="flex items-start gap-2 rounded-lg border border-athens-stone bg-athens-highlight px-3 py-2.5">
+                    <div className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-athens-stone">
+                      <div className="size-1.5 rounded-full bg-athens-blue" />
                     </div>
-                    <span className="flex-1 text-sm text-slate-700">{r}</span>
-                    <button type="button" onClick={() => removeRule(i)} className="text-slate-300 hover:text-red-400 transition-colors">
+                    <span className="flex-1 text-sm text-athens-blue">{r}</span>
+                    <button type="button" onClick={() => removeRule(i)} className="text-athens-blue/30 transition-colors hover:text-athens-blue">
                       <Trash2 className="size-3.5" />
                     </button>
                   </li>
@@ -184,12 +200,12 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
                   onChange={e => setNewRule(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && addRule()}
                   placeholder="Add a rule…"
-                  className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-600/25"
+                  className="flex-1 rounded-lg border border-athens-stone px-3 py-2 text-sm text-athens-blue outline-none focus:border-athens-blue focus:ring-2 focus:ring-athens-blue/20"
                 />
                 <button
                   type="button"
                   onClick={addRule}
-                  className="rounded-lg bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700 transition-colors"
+                  className="rounded-lg bg-athens-blue px-3 py-2 text-white transition-colors hover:bg-athens-blue/90"
                 >
                   <Plus className="size-4" />
                 </button>
@@ -200,36 +216,36 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
           {step === 3 && (
             <div className="space-y-5">
               <div>
-                <h2 className="text-base font-semibold text-slate-900">Connect your data sources</h2>
-                <p className="mt-1 text-sm text-slate-500">Phuko pulls events from your tools to build your full picture.</p>
+                <h2 className="text-base font-semibold text-athens-blue">Connect your data sources</h2>
+                <p className="mt-1 text-sm font-light text-athens-blue/70">Athena pulls events from your tools to build your full picture.</p>
               </div>
               <ul className="space-y-3">
                 {SOURCES.map((s, i) => {
                   const done = connectedCount > i;
                   const active = connectedCount === i && connectPhase === "connecting";
                   return (
-                    <li key={s.id} className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
+                    <li key={s.id} className="flex items-center gap-3 rounded-xl border border-athens-stone bg-athens-highlight px-4 py-3">
                       <div className={cn("flex size-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold text-white", s.color)}>
                         {s.abbr}
                       </div>
-                      <span className="flex-1 text-sm font-medium text-slate-800">{s.label}</span>
+                      <span className="flex-1 text-sm font-medium text-athens-blue">{s.label}</span>
                       {done ? (
-                        <span className="flex items-center gap-1 text-xs font-medium text-emerald-600">
+                        <span className="flex items-center gap-1 text-xs font-medium text-athens-blue">
                           <Check className="size-3.5" /> Connected
                         </span>
                       ) : active ? (
-                        <span className="flex items-center gap-1 text-xs text-slate-400">
+                        <span className="flex items-center gap-1 text-xs text-athens-blue/55">
                           <Loader2 className="size-3.5 animate-spin" /> Connecting…
                         </span>
                       ) : (
-                        <span className="text-xs text-slate-300">Waiting…</span>
+                        <span className="text-xs text-athens-blue/40">Waiting…</span>
                       )}
                     </li>
                   );
                 })}
               </ul>
               {connectPhase === "done" && (
-                <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm font-medium text-emerald-800">
+                <div className="rounded-xl border border-athens-stone bg-athens-highlight px-4 py-3 text-sm font-medium text-athens-blue">
                   All sources connected — 11 events imported
                 </div>
               )}
@@ -237,12 +253,12 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
           )}
         </div>
 
-        <div className="border-t border-slate-100 px-8 py-5 flex justify-between items-center">
+        <div className="flex items-center justify-between border-t border-athens-stone px-8 py-5">
           {step > 1 ? (
             <button
               type="button"
               onClick={() => setStep(s => (s - 1) as Step)}
-              className="text-sm text-slate-500 hover:text-slate-700"
+              className="text-sm font-light text-athens-blue/60 hover:text-athens-blue"
             >
               Back
             </button>
@@ -257,8 +273,8 @@ export function RulesSetup({ onComplete }: { onComplete: () => void }) {
             className={cn(
               "flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all",
               step === 3 && connectPhase !== "done"
-                ? "bg-slate-300 cursor-not-allowed"
-                : "bg-emerald-600 hover:bg-emerald-700"
+                ? "cursor-not-allowed bg-athens-stone text-athens-blue/50"
+                : "bg-athens-blue hover:bg-athens-blue/90"
             )}
           >
             {step === 3 ? "Enter Dashboard" : "Next"}
