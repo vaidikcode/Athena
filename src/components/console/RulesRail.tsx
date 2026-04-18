@@ -24,9 +24,12 @@ import {
   ChevronDown,
   ChevronUp,
   Zap,
+  Unplug,
+  PlugZap,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { MOCK_DATA_SOURCES } from "@/lib/mock/data";
+import { MOCK_DATA_SOURCES, type SourceId } from "@/lib/mock/data";
+import { useSourceConnections } from "@/lib/client/source-connections";
 
 interface Rule {
   id: string;
@@ -281,6 +284,8 @@ export function RulesRail({
   const [actionsOpen, setActionsOpen] = useState(true);
   const [sourcesOpen, setSourcesOpen] = useState(true);
   const [rulesOpen, setRulesOpen] = useState(true);
+  const { connections, revoke, reconnect } = useSourceConnections();
+  const [revokeConfirm, setRevokeConfirm] = useState<SourceId | null>(null);
 
   const [adding, setAdding] = useState(false);
   const [newTitle, setNewTitle] = useState("");
