@@ -1,4 +1,4 @@
-# Phuko AI — Life Operating System
+#  Athena — Life Operating System
 
 An AI agent that runs **every hour over your full local calendar day** to find bottlenecks, compare against **rules**, and suggest (or execute) concrete calendar fixes—plus a daily pass on the prior day. Built with Next.js 15, LangGraph.js, and Drizzle + libSQL (`@libsql/client`). Runs locally against a `file:./phuko.db` SQLite file by default; swap to a hosted Turso DB with a single env-var change. Set **`TZ`** (see `.env.example`) so “today” for background jobs matches your timezone.
 
